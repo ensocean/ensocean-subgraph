@@ -1,0 +1,127 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+features:
+  - fullTextSearch
+dataSources:
+  - kind: ethereum
+    name: EthRegistrarControllerOld
+    network: mainnet
+    source:
+      address: "0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5"
+      abi: EthRegistrarControllerOld
+      startBlock: 2000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/ethRegistrar.ts
+      entities:
+        - Domain
+        - DomainEvent
+      abis:
+        - name: EthRegistrarControllerOld
+          file: ./abis/EthRegistrarControllerOld.json
+      eventHandlers:
+        - event: >-
+            NameRegistered(string,indexed bytes32,indexed
+            address,uint256,uint256)
+          handler: handleNameRegisteredByControllerOld
+        - event: "NameRenewed(string,indexed bytes32,uint256,uint256)"
+          handler: handleNameRenewedByController
+  - kind: ethereum
+    name: EthRegistrarController
+    network: mainnet
+    source:
+      abi: EthRegistrarController
+      startBlock: 2000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/ethRegistrar.ts
+      entities:
+        - Domain
+        - DomainEvent
+      abis:
+        - name: EthRegistrarController
+          file: ./abis/EthRegistrarController.json
+      eventHandlers:
+        - event: >-
+            NameRegistered(string,indexed bytes32,indexed
+            address,uint256,uint256,uint256)
+          handler: handleNameRegisteredByController
+        - event: "NameRenewed(string,indexed bytes32,uint256,uint256)"
+          handler: handleNameRenewedByController
+  - kind: ethereum
+    name: BaseRegistrarImplementation
+    network: mainnet
+    source:
+      address: "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85"
+      abi: BaseRegistrarImplementation
+      startBlock: 2000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/ethRegistrar.ts
+      entities:
+        - Domain
+        - DomainEvent
+      abis:
+        - name: BaseRegistrarImplementation
+          file: ./abis/BaseRegistrarImplementation.json
+      eventHandlers:
+        - event: "NameRegistered(indexed uint256,indexed address,uint256)"
+          handler: handleNameRegisteredByRegistrar
+        - event: "NameRenewed(indexed uint256,uint256)"
+          handler: handleNameRenewedByRegistrar
+        - event: "Transfer(indexed address,indexed address,indexed uint256)"
+          handler: handleNameTransferredByRegistrar
+  - kind: ethereum
+    name: ENSRegistryWithFallback
+    network: mainnet
+    source:
+      address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e"
+      abi: ENSRegistryWithFallback
+      startBlock: 2000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/ethRegistrar.ts
+      entities:
+        - Domain
+        - DomainEvent
+      abis:
+        - name: ENSRegistryWithFallback
+          file: ./abis/ENSRegistryWithFallback.json
+      eventHandlers:
+        - event: "Transfer(indexed bytes32,address)"
+          handler: handleTransferByRegistry 
+        - event: "NewOwner(indexed bytes32,indexed bytes32,address)"
+          handler: handleNewOwnerByRegistry
+  - kind: ethereum
+    name: ENSRegistryWithFallbackOld
+    network: mainnet
+    source:
+      address: "0x314159265dd8dbb310642f98f50c066173c1259b"
+      abi: ENSRegistryWithFallback
+      startBlock: 2000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/ethRegistrar.ts
+      entities:
+        - Domain
+        - DomainEvent
+      abis:
+        - name: ENSRegistryWithFallback
+          file: ./abis/ENSRegistryWithFallback.json
+      eventHandlers:
+        - event: "Transfer(indexed bytes32,address)"
+          handler: handleTransferByRegistryOld
+        - event: "NewOwner(indexed bytes32,indexed bytes32,address)"
+          handler: handleNewOwnerByRegistryOld
+  

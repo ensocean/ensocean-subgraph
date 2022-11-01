@@ -1,0 +1,40 @@
+type _Schema_
+  @fulltext(
+    name: "domainSearch"
+    language: simple
+    algorithm: proximityRank
+    include: [{ entity: "Domain", fields: [{ name: "label" }] }]
+  )
+
+type Domain @entity {
+  id: ID!
+  name: String
+  label: String
+  hash: Bytes
+  owner: String
+  expires: BigInt
+  registrant: String
+  registered: BigInt
+  created: BigInt
+  length: Int
+  segmentLength: Int
+  tags: [String!]
+}
+  
+type DomainEvent @entity {
+  id: ID!
+  blockNumber: Int
+  transactionID: Bytes
+  blockTimestamp: BigInt
+  domain: String
+  name: String
+  from: String
+  to: String
+  cost: BigInt
+  expires: BigInt
+}
+
+type Tag @entity {
+  id: ID!
+  domains: [Domain!]! @derivedFrom(field: “tags”)
+}

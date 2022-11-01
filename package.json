@@ -1,0 +1,29 @@
+{
+  "name": "ens-subgraph",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ ensocean/ens-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ ensocean/ens-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ ensocean/ens-subgraph",
+    "deploy-local": "graph deploy ensocean/ens-subgraph --debug --node http://localhost:8020/ --ipfs http://localhost:5001 --version-label 0.0.1",
+    "setup-local": "yarn codegen && yarn build  && yarn remove-local && yarn create-local && yarn deploy-local",
+    "create-test": "graph create --node http://graphtest.ensocean.com:8020/ ensocean/ens-subgraph",
+    "remove-test": "graph remove --node http://graphtest.ensocean.com:8020/ ensocean/ens-subgraph",
+    "deploy-test": "graph deploy ensocean/ens-subgraph --debug --node http://graphtest.ensocean.com:8020/ --ipfs http://graphtest.ensocean.com:5001 --version-label 0.0.1",
+    "deploy-test-all": "yarn codegen && yarn build  && yarn remove-test && yarn create-test && yarn deploy-test",
+    "create-prod": "graph create --node http://graph.ensocean.com:8020/ ensocean/ens-subgraph",
+    "remove-prod": "graph remove --node http://graph.ensocean.com:8020/ ensocean/ens-subgraph",
+    "deploy-prod": "graph deploy ensocean/ens-subgraph --debug --node http://graph.ensocean.com:8020/ --ipfs http://graph.ensocean.com:5001 --version-label 0.0.1",
+    "deploy-prod-all": "yarn codegen && yarn build  && yarn remove-prod && yarn create-prod && yarn deploy-prod",
+    "test": "graph test"
+  },
+  "dependencies": {
+    "@ensdomains/content-hash": "^2.5.3",
+    "@graphprotocol/graph-cli": "0.35.0",
+    "@graphprotocol/graph-ts": "^0.28.1",
+    "assemblyscript-regex": "^1.6.4"
+  }
+}
