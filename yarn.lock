@@ -3592,6 +3592,16 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
+typescript-dotnet-commonjs@^4.11.2:
+  version "4.11.2"
+  resolved "https://registry.yarnpkg.com/typescript-dotnet-commonjs/-/typescript-dotnet-commonjs-4.11.2.tgz#16e509843b29319b73a997997ae660f3bec0beda"
+  integrity sha512-vIQeftqDwmB6SMmG8x4YNgHxgZcARTE/hoGNbhejtl34T/szLkKRweUEXAtiuW+Lx0Tbg3peV3QXpN2iNYCEzQ==
+
+typescript-dotnet-umd@^4.11.2:
+  version "4.11.2"
+  resolved "https://registry.yarnpkg.com/typescript-dotnet-umd/-/typescript-dotnet-umd-4.11.2.tgz#452bab9cddd834ba146556653418b7df3ab72fac"
+  integrity sha512-pEBiFOw8efuO8dOAI9b+nmBVi9VnrJ4GN9U9NZvaEYTWojrzDwqVyb1h3dEcOP13E+1Jx7WMSR3MEUj4486qIQ==
+
 uint8arrays@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-3.1.1.tgz#2d8762acce159ccd9936057572dade9459f65ae0"

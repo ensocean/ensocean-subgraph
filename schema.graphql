@@ -32,9 +32,4 @@ type DomainEvent @entity {
   to: String
   cost: BigInt
   expires: BigInt
-}
-
-type Tag @entity {
-  id: ID!
-  domains: [Domain!]! @derivedFrom(field: “tags”)
-}
+} 
