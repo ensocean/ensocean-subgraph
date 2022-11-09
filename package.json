@@ -21,14 +21,14 @@
     "build-test": "graph build --network goerli",
     "create-test": "graph create --node https://graphtest.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
     "remove-test": "graph remove --node https://graphtest.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
-    "deploy-test": "graph deploy ensocean/ensocean-subgraph --debug --node https://graphtest.ensocean.com/ --version-label 0.0.1 --network goerli",
+    "deploy-test": "graph deploy ensocean/ensocean-subgraph --debug --node https://graphtest.ensocean.com/ --ipfs https://ipfstest.ensocean.com --version-label 0.0.1 --network goerli",
     "setup-test": "yarn codegen-test && yarn build-test  && yarn remove-test && yarn create-test && yarn deploy-test",
     
     "codegen-prod": "graph codegen --network mainnet",
     "build-prod": "graph build --network mainnet",
     "create-prod": "graph create --node https://graph.ensocean.com/ --network mainnet ensocean/ensocean-subgraph",
     "remove-prod": "graph remove --node https://graph.ensocean.com/ --network mainnet ensocean/ensocean-subgraph",
-    "deploy-prod": "graph deploy ensocean/ensocean-subgraph --debug --node https://graph.ensocean.com/ --version-label 0.0.1 --network mainnet",
+    "deploy-prod": "graph deploy ensocean/ensocean-subgraph --debug --node https://graph.ensocean.com/ --ipfs https://ipfs.ensocean.com --version-label 0.0.1 --network mainnet",
     "setup-prod": "yarn codegen-prod && yarn build-prod  && yarn remove-prod && yarn create-prod && yarn deploy-prod"
     
     
@@ -39,4 +39,6 @@
     "@graphprotocol/graph-ts": "^0.28.1",
     "assemblyscript-regex": "^1.6.4"
   }
+ 
+
 }
