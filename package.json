@@ -3,22 +3,35 @@
   "license": "UNLICENSED",
   "type": "commonjs",
   "scripts": {
-    "codegen": "graph codegen",
-    "build": "graph build",
+    "codegen": "graph codegen --network mainnet",
+    "build": "graph build --network mainnet",
+    "test": "graph test --network mainnet",
     "deploy": "graph auth --product hosted-service c7eb11d1b9d59cd2ef3f6c0935c43803 && graph deploy --product hosted-service ensocean/ensocean-subgraph",
-    "create-local": "graph create --node http://localhost:8020/ ensocean/ensocean-subgraph",
-    "remove-local": "graph remove --node http://localhost:8020/ ensocean/ensocean-subgraph",
-    "deploy-local": "graph deploy ensocean/ensocean-subgraph --debug --node http://localhost:8020/ --ipfs http://localhost:5001 --version-label 0.0.1",
-    "setup-local": "yarn codegen && yarn build  && yarn remove-local && yarn create-local && yarn deploy-local",
-    "create-test": "graph create --node http://graphtest.ensocean.com:8020/ ensocean/ensocean-subgraph",
-    "remove-test": "graph remove --node http://graphtest.ensocean.com:8020/ ensocean/ensocean-subgraph",
-    "deploy-test": "graph deploy ensocean/ensocean-subgraph --debug --node http://graphtest.ensocean.com:8020/ --ipfs http://graphtest.ensocean.com:5001 --version-label 0.0.1",
-    "deploy-test-all": "yarn codegen && yarn build  && yarn remove-test && yarn create-test && yarn deploy-test",
-    "create-prod": "graph create --node http://graph.ensocean.com:8020/ ensocean/ensocean-subgraph",
-    "remove-prod": "graph remove --node http://graph.ensocean.com:8020/ ensocean/ensocean-subgraph",
-    "deploy-prod": "graph deploy ensocean/ensocean-subgraph --debug --node http://graph.ensocean.com:8020/ --ipfs http://graph.ensocean.com:5001 --version-label 0.0.1",
-    "deploy-prod-all": "yarn codegen && yarn build  && yarn remove-prod && yarn create-prod && yarn deploy-prod",
-    "test": "graph test"
+    "setup-remote": "yarn codegen && yarn build && yarn deploy",
+
+    "codegen-local": "graph codegen --network goerli",
+    "build-local": "graph build --network goerli",
+
+    "create-local": "graph create --node http://localhost:8020/ --network goerli ensocean/ensocean-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ --network goerli ensocean/ensocean-subgraph",
+    "deploy-local": "graph deploy ensocean/ensocean-subgraph --debug --node http://localhost:8020/ --ipfs http://localhost:5001 --version-label 0.0.1 --network goerli",
+    "setup-local": "yarn codegen-local && yarn build-local  && yarn remove-local && yarn create-local && yarn deploy-local",
+    
+    "codegen-test": "graph codegen --network goerli",
+    "build-test": "graph build --network goerli",
+    "create-test": "graph create --node https://graphtest.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
+    "remove-test": "graph remove --node https://graphtest.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
+    "deploy-test": "graph deploy ensocean/ensocean-subgraph --debug --node https://graphtest.ensocean.com/ --version-label 0.0.1 --network goerli",
+    "setup-test": "yarn codegen-test && yarn build-test  && yarn remove-test && yarn create-test && yarn deploy-test",
+    
+    "codegen-prod": "graph codegen --network mainnet",
+    "build-prod": "graph build --network mainnet",
+    "create-prod": "graph create --node https://graph.ensocean.com/ --network mainnet ensocean/ensocean-subgraph",
+    "remove-prod": "graph remove --node https://graph.ensocean.com/ --network mainnet ensocean/ensocean-subgraph",
+    "deploy-prod": "graph deploy ensocean/ensocean-subgraph --debug --node https://graph.ensocean.com/ --version-label 0.0.1 --network mainnet",
+    "setup-prod": "yarn codegen-prod && yarn build-prod  && yarn remove-prod && yarn create-prod && yarn deploy-prod"
+    
+    
   },
   "dependencies": {
     "@ensdomains/content-hash": "^2.5.3",

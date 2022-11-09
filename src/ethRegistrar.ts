@@ -343,66 +343,71 @@ function _handleNewOwner(event: NameNewOwnerByRegistry): void {
 } 
 
 function saveDomain(domain: Domain, event: ethereum.Event): void {
-
-  if(domain != null ) { 
+  
+    if(domain != null ) {  
       if(domain.label != null) {
         if(!checkByteLength(domain.label!)) return;
-
+  
+        log.warning("label: {} ", [domain.label!]);
+  
         domain.length = getLength(domain.label!)
         domain.segmentLength = getSegmentLength(domain.label!)
+
+        if(domain.length > 1000) return;
         
         let tags = domain.tags;
         if(tags == null) tags = new Array<string>();
         
-        if(hasLetter(domain.label!) && !tags.includes("hasletter")) {
-          tags.push("hasletter")
+        if(hasLetter(domain.label!) && !tags.includes("include-letter")) {
+          tags.push("include-letter")
         }
-
-        if(onlyLetter(domain.label!) && !tags.includes("onlyletter")) {
-          tags.push("onlyletter")
+  
+        if(onlyLetter(domain.label!) && !tags.includes("only-letter")) {
+          tags.push("only-letter")
         }
-
-        if(hasDigit(domain.label!) && !tags.includes("hasdigit")) {
-          tags.push("hasdigit")
+  
+        if(hasDigit(domain.label!) && !tags.includes("include-digit")) {
+          tags.push("include-digit")
         }
       
-        if(onlyDigit(domain.label!) && !tags.includes("onlydigit")) {
-          tags.push("onlydigit")
+        if(onlyDigit(domain.label!) && !tags.includes("only-digit")) {
+          tags.push("only-digit")
         }
         
-        if(hasEmoji(domain.label!) && !tags.includes("hasemoji")) {
-          tags.push("hasemoji")
+        if(hasEmoji(domain.label!) && !tags.includes("include-emoji")) {
+          tags.push("include-emoji")
         }
       
-        if(onlyEmoji(domain.label!) && !tags.includes("onlyemoji")) {
-          tags.push("onlyemoji")
+        if(onlyEmoji(domain.label!) && !tags.includes("only-emoji")) {
+          tags.push("only-emoji")
         }
       
-        if(hasUnicode(domain.label!) && !tags.includes("hasunicode")) {
-          tags.push("hasunicode")
+        if(hasUnicode(domain.label!) && !tags.includes("include-unicode")) {
+          tags.push("include-unicode")
         }
       
-        if(onlyUnicode(domain.label!) && !tags.includes("onlyunicode")) {
-          tags.push("onlyunicode")
+        if(onlyUnicode(domain.label!) && !tags.includes("only-unicode")) {
+          tags.push("only-unicode")
         }
-
+  
         if(isPalindrome(domain.label!) && !tags.includes("palindrome")) {
           tags.push("palindrome")
         }
-
-        if(hasArabic(domain.label!) && !tags.includes("hasarabic")) {
-          tags.push("hasarabic")
+  
+        if(hasArabic(domain.label!) && !tags.includes("include-arabic")) {
+          tags.push("include-arabic")
         }
       
-        if(onlyArabic(domain.label!) && !tags.includes("onlyarabic")) {
-          tags.push("onlyarabic")
+        if(onlyArabic(domain.label!) && !tags.includes("only-arabic")) {
+          tags.push("only-arabic")
         }
-
+  
         domain.tags = tags; 
-    } 
-    
-    domain.save()
-  }
+      } 
+      
+      domain.extension = "eth"
+      domain.save() 
+  } 
 }
  
 function createDomainByNode(node: string, timestamp: BigInt): Domain {

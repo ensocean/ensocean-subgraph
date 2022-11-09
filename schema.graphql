@@ -18,6 +18,7 @@ type Domain @entity {
   created: BigInt
   length: Int
   segmentLength: Int
+  extension: String
   tags: [String!]
 }
   
