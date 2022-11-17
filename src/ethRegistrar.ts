@@ -49,6 +49,46 @@ function checkByteLength(name: string): boolean {
 function makeSubnode(event:NameNewOwnerByRegistry): string {
   return crypto.keccak256(concat(event.params.node, event.params.label)).toHexString()
 }
+ 
+export function handleNameRegisteredByControllerOld(event: NameRegisteredByControllerOld): void {
+  
+  let cost = event.params.cost 
+  let expires = event.params.expires
+  let label = event.params.label
+  let name = event.params.name
+  let owner = event.params.owner
+  let blockNumber = event.block.number
+  let transactionHash = event.transaction.hash
+  let blockTimestamp = event.block.timestamp
+
+  const labelHash = crypto.keccak256(ByteArray.fromUTF8(name));
+  if(!labelHash.equals(label)) {
+    log.warning(
+      "Expected '{}' to hash to {}, but got {} instead. Skipping.",
+      [name, labelHash.toHex(), label.toHex()]
+    );
+    return;
+  }
+
+  if(name.indexOf(".") !== -1) {
+    log.warning("Invalid label '{}'. Skipping.", [name]);
+    return;
+  }
+ 
+  let domain = getDomainByLabel(label, blockTimestamp)
+  if(domain.label !== name) {
+    domain.label = name
+    domain.name = name + '.eth' 
+  }
+
+  domain.hash = label
+  domain.owner = owner.toHexString()
+  domain.registrant = owner.toHexString()
+  domain.registered = blockTimestamp
+  domain.expires = expires
+  saveDomain(domain, event)
+}
+ 
 
 export function handleNameRegisteredByController(event: NameRegisteredByController): void {
    
@@ -91,45 +131,6 @@ export function handleNameRegisteredByController(event: NameRegisteredByControll
   saveDomain(domain, event) 
 }
 
-export function handleNameRegisteredByControllerOld(event: NameRegisteredByControllerOld): void {
-  
-  let cost = event.params.cost 
-  let expires = event.params.expires
-  let label = event.params.label
-  let name = event.params.name
-  let owner = event.params.owner
-  let blockNumber = event.block.number
-  let transactionHash = event.transaction.hash
-  let blockTimestamp = event.block.timestamp
-
-  const labelHash = crypto.keccak256(ByteArray.fromUTF8(name));
-  if(!labelHash.equals(label)) {
-    log.warning(
-      "Expected '{}' to hash to {}, but got {} instead. Skipping.",
-      [name, labelHash.toHex(), label.toHex()]
-    );
-    return;
-  }
-
-  if(name.indexOf(".") !== -1) {
-    log.warning("Invalid label '{}'. Skipping.", [name]);
-    return;
-  }
- 
-  let domain = getDomainByLabel(label, blockTimestamp)
-  if(domain.label !== name) {
-    domain.label = name
-    domain.name = name + '.eth' 
-  }
-
-  domain.hash = label
-  domain.owner = owner.toHexString()
-  domain.registrant = owner.toHexString()
-  domain.registered = blockTimestamp
-  domain.expires = expires
-  saveDomain(domain, event)
-}
- 
 export function handleNameRenewedByController(event: NameRenewedByController): void {
    
   let cost = event.params.cost
@@ -165,6 +166,7 @@ export function handleNameRenewedByController(event: NameRenewedByController): v
   saveDomain(domain, event)
 }
    
+
 export function handleNameRegisteredByRegistrar(event: NameRegisteredByRegistrar): void {
 
   let tokenId = event.params.id
@@ -250,13 +252,16 @@ export function handleNameTransferredByRegistrar(event: NameTransferredByRegistr
   domainEvent.blockTimestamp = blockTimestamp
   domainEvent.from = from.toHexString()
   domainEvent.to = to.toHexString()
-  if(from.toHexString() == EMPTY_ADDRESS) { 
-    domainEvent.name = "Mint" 
-  } else if(to.toHexString() == EMPTY_ADDRESS) { 
-    domainEvent.name = "Burn" 
-  } else {  
-    domainEvent.name = "Transferred" 
+  
+
+  if(from.toHexString() == EMPTY_ADDRESS) {
+    domainEvent.name = "Mint";
+  } else if(to.toHexString() == EMPTY_ADDRESS) {
+    domainEvent.name = "Burn";
+  } else {
+    domainEvent.name = "Transfer";
   }
+  
   domainEvent.save() 
 }
  
@@ -267,19 +272,19 @@ export function handleTransferByRegistry(event: NameTransferredByRegistry): void
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
    
-  let domain = getDomainByNode(node.toHexString(), blockTimestamp)
+  let domain = getDomainByNode(node, blockTimestamp)
   domain.owner = owner.toHex()
   saveDomain(domain, event)
 
-  let domainEvent = new DomainEvent(createEventID(event))
-  domainEvent.domain = domain.id
-  domainEvent.blockNumber = blockNumber.toI32()
-  domainEvent.transactionID = transactionHash
-  domainEvent.blockTimestamp = blockTimestamp
-  domainEvent.name = "Transfer"
-  domainEvent.from = EMPTY_ADDRESS
-  domainEvent.to = owner.toHex()
-  domainEvent.save()  
+  //let domainEvent = new DomainEvent(createEventID(event))
+  //domainEvent.domain = domain.id
+  //domainEvent.blockNumber = blockNumber.toI32()
+  //domainEvent.transactionID = transactionHash
+  //domainEvent.blockTimestamp = blockTimestamp
+  //domainEvent.name = "Transfer"
+  //domainEvent.from = EMPTY_ADDRESS
+  //domainEvent.to = owner.toHex()
+  //domainEvent.save()  
 } 
 
 export function handleNewOwnerByRegistry(event: NameNewOwnerByRegistry): void { 
@@ -302,9 +307,9 @@ function _handleNewOwner(event: NameNewOwnerByRegistry): void {
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
   
-  let subnode = crypto.keccak256(concat(node, hash)).toHexString()
+  let subnode = Bytes.fromByteArray(crypto.keccak256(concat(node, hash)))
   let domain = getDomainByNode(subnode, blockTimestamp)
-  let parent = getDomainByNode(node.toHexString(), blockTimestamp)
+  let parent = getDomainByNode(node, blockTimestamp)
  
   if(domain.name == null) { 
     let label = ens.nameByHash(hash.toHexString())
@@ -331,15 +336,15 @@ function _handleNewOwner(event: NameNewOwnerByRegistry): void {
   domain.hash = hash
   saveDomain(domain, event)
  
-  let domainEvent = new DomainEvent(createEventID(event))
-  domainEvent.domain = domain.id
-  domainEvent.blockNumber = blockNumber.toI32()
-  domainEvent.transactionID = transactionHash
-  domainEvent.blockTimestamp = blockTimestamp
-  domainEvent.name = "NewOwner"
-  domainEvent.from = EMPTY_ADDRESS
-  domainEvent.to = owner.toHex()
-  domainEvent.save()
+  //let domainEvent = new DomainEvent(createEventID(event))
+  //domainEvent.domain = domain.id
+  //domainEvent.blockNumber = blockNumber.toI32()
+  //domainEvent.transactionID = transactionHash
+  //domainEvent.blockTimestamp = blockTimestamp
+  //domainEvent.name = "NewOwner"
+  //domainEvent.from = EMPTY_ADDRESS
+  //domainEvent.to = owner.toHex()
+  //domainEvent.save()
 } 
 
 function saveDomain(domain: Domain, event: ethereum.Event): void {
@@ -410,13 +415,13 @@ function saveDomain(domain: Domain, event: ethereum.Event): void {
   } 
 }
  
-function createDomainByNode(node: string, timestamp: BigInt): Domain {
+function createDomainByNode(node: Bytes, timestamp: BigInt): Domain {
   let domain = new Domain(node)  
   domain.created = timestamp 
   return domain
 }
 
-function getDomainByNode(node: string, timestamp: BigInt): Domain {
+function getDomainByNode(node: Bytes, timestamp: BigInt): Domain {
   let domain = Domain.load(node)
   if(domain == null) {
     return createDomainByNode(node, timestamp)
@@ -426,7 +431,7 @@ function getDomainByNode(node: string, timestamp: BigInt): Domain {
 }
  
 function getDomainByLabel(label: ByteArray, timestamp: BigInt): Domain {
-  let node = crypto.keccak256(concat(ROOT_NODE, label)).toHex()
+  let node = Bytes.fromByteArray(crypto.keccak256(concat(ROOT_NODE, label)))
   let domain = getDomainByNode(node, timestamp)
   if(domain == null) {
     return createDomainByNode(node, timestamp)

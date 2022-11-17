@@ -5,6 +5,8 @@ import {
     ethereum,
     crypto, 
     Bytes,
+    json,
+    dataSource
   } from '@graphprotocol/graph-ts'
  
 import { RegExp as Regex } from 'assemblyscript-regex/assembly/index'
@@ -22,8 +24,8 @@ export const BIG_INT_ZERO = BigInt.fromI32(0)
  
 const PALINDROME_REGEX = `^\b(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*\11?[ \t,'"]*\10|\10?)[ \t,'"]*\9|\9?)[ \t,'"]*\8|\8?)[ \t,'"]*\7|\7?)[ \t,'"]*\6|\6?)[ \t,'"]*\5|\5?)[ \t,'"]*\4|\4?)[ \t,'"]*\3|\3?)[ \t,'"]*\2|\2?))?[ \t,'"]*\1\b$`
 
-export function createEventID(event:  ethereum.Event): string {
-    return event.block.number.toString().concat('-').concat(event.logIndex.toString())
+export function createEventID(event:  ethereum.Event): Bytes {
+    return Bytes.fromUTF8( event.block.number.toString().concat('-').concat(event.logIndex.toString() ));
 }
 
 export function createUniqueID(event:  ethereum.Event): string {

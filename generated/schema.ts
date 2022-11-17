@@ -12,9 +12,9 @@ import {
 } from "@graphprotocol/graph-ts";
 
 export class Domain extends Entity {
-  constructor(id: string) {
+  constructor(id: Bytes) {
     super();
-    this.set("id", Value.fromString(id));
+    this.set("id", Value.fromBytes(id));
   }
 
   save(): void {
@@ -22,24 +22,24 @@ export class Domain extends Entity {
     assert(id != null, "Cannot save Domain entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type Domain must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.BYTES,
+        `Entities of type Domain must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("Domain", id.toString(), this);
+      store.set("Domain", id.toBytes().toHexString(), this);
     }
   }
 
-  static load(id: string): Domain | null {
-    return changetype<Domain | null>(store.get("Domain", id));
+  static load(id: Bytes): Domain | null {
+    return changetype<Domain | null>(store.get("Domain", id.toHexString()));
   }
 
-  get id(): string {
+  get id(): Bytes {
     let value = this.get("id");
-    return value!.toString();
+    return value!.toBytes();
   }
 
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
   }
 
   get name(): string | null {
@@ -229,12 +229,21 @@ export class Domain extends Entity {
       this.set("tags", Value.fromStringArray(<Array<string>>value));
     }
   }
+
+  get events(): Array<Bytes> {
+    let value = this.get("events");
+    return value!.toBytesArray();
+  }
+
+  set events(value: Array<Bytes>) {
+    this.set("events", Value.fromBytesArray(value));
+  }
 }
 
 export class DomainEvent extends Entity {
-  constructor(id: string) {
+  constructor(id: Bytes) {
     super();
-    this.set("id", Value.fromString(id));
+    this.set("id", Value.fromBytes(id));
   }
 
   save(): void {
@@ -242,24 +251,26 @@ export class DomainEvent extends Entity {
     assert(id != null, "Cannot save DomainEvent entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type DomainEvent must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.BYTES,
+        `Entities of type DomainEvent must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("DomainEvent", id.toString(), this);
+      store.set("DomainEvent", id.toBytes().toHexString(), this);
     }
   }
 
-  static load(id: string): DomainEvent | null {
-    return changetype<DomainEvent | null>(store.get("DomainEvent", id));
+  static load(id: Bytes): DomainEvent | null {
+    return changetype<DomainEvent | null>(
+      store.get("DomainEvent", id.toHexString())
+    );
   }
 
-  get id(): string {
+  get id(): Bytes {
     let value = this.get("id");
-    return value!.toString();
+    return value!.toBytes();
   }
 
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
   }
 
   get blockNumber(): i32 {
@@ -305,21 +316,13 @@ export class DomainEvent extends Entity {
     }
   }
 
-  get domain(): string | null {
+  get domain(): Bytes {
     let value = this.get("domain");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+    return value!.toBytes();
   }
 
-  set domain(value: string | null) {
-    if (!value) {
-      this.unset("domain");
-    } else {
-      this.set("domain", Value.fromString(<string>value));
-    }
+  set domain(value: Bytes) {
+    this.set("domain", Value.fromBytes(value));
   }
 
   get name(): string | null {

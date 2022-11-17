@@ -5,29 +5,6 @@ features:
   - fullTextSearch
 dataSources:
   - kind: ethereum
-    name: EthRegistrarControllerOld
-    network: goerli
-    source:
-      abi: EthRegistrarControllerOld
-      address: "0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5"
-      startBlock: 2000000
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ./src/ethRegistrar.ts
-      entities:
-        - Domain
-        - DomainEvent
-      abis:
-        - name: EthRegistrarControllerOld
-          file: ./abis/EthRegistrarControllerOld.json
-      eventHandlers:
-        - event: NameRegistered(string,indexed bytes32,indexed address,uint256,uint256)
-          handler: handleNameRegisteredByControllerOld
-        - event: NameRenewed(string,indexed bytes32,uint256,uint256)
-          handler: handleNameRenewedByController
-  - kind: ethereum
     name: EthRegistrarController
     network: goerli
     source:

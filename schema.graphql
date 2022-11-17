@@ -7,7 +7,7 @@ type _Schema_
   )
 
 type Domain @entity {
-  id: ID!
+  id: Bytes!
   name: String
   label: String
   hash: Bytes
@@ -20,17 +20,18 @@ type Domain @entity {
   segmentLength: Int
   extension: String
   tags: [String!]
+  events: [DomainEvent!]! @derivedFrom(field: "domain")
 }
   
-type DomainEvent @entity {
-  id: ID!
+type DomainEvent @entity(immutable: true) {
+  id: Bytes!
   blockNumber: Int
   transactionID: Bytes
   blockTimestamp: BigInt
-  domain: String
+  domain: Domain!
   name: String
   from: String
   to: String
   cost: BigInt
-  expires: BigInt
+  expires: BigInt 
 } 
