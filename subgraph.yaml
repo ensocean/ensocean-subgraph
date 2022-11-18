@@ -3,6 +3,7 @@ schema:
   file: ./schema.graphql
 features:
   - fullTextSearch
+  - grafting
 dataSources:
   - kind: ethereum
     name: EthRegistrarController
