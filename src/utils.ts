@@ -69,57 +69,57 @@ export function getSegmentLength(s: string): i32 {
 }
 
 export function hasLetter(s: string): bool {
-  const regex = new Regex("[a-zA-Z]", "g");
+  const regex = new Regex("[a-zA-Z]", "gi");
   return regex.test(s) 
 }
 
 export function onlyLetter(s: string): bool {
-  const regex = new Regex("^[a-zA-Z]+$", "g");
+  const regex = new Regex("^[a-zA-Z]+$", "gi");
   return regex.test(s) 
 }
 
 export function hasDigit(s: string): bool {
-  const regex = new Regex("[0-9]", "g");
+  const regex = new Regex("[0-9]", "gi");
   return regex.test(s)
 }
 
 export function onlyDigit(s: string): bool {
-  const regex = new Regex("^[0-9]+$", "g");
+  const regex = new Regex("^[0-9]+$", "gi");
   return regex.test(s) 
 }
 
 export function hasUnicode(s: string): bool {
-  const regex = new Regex("[ -~]", "g");
+  const regex = new Regex("[ -~]", "gi");
   return !regex.test(s) 
 }
 
 export function onlyUnicode(s: string): bool {
-  const regex = new Regex("^[ -~]+$", "g");
+  const regex = new Regex("^[ -~]+$", "gi");
   return !regex.test(s) 
 }
 
 export function hasEmoji(s: string): bool { 
-  const regex = new Regex(EMOJI_REGEX, "g");
+  const regex = new Regex(EMOJI_REGEX, "gi");
   return regex.test(s) 
 }
 
 export function onlyEmoji(s: string): bool {
-  const regex = new Regex("^"+ EMOJI_REGEX+"+$", "g");
+  const regex = new Regex("^"+ EMOJI_REGEX+"+$", "gi");
   return regex.test(s) 
 }
 
 export function isPalindrome(s: string): bool {
-  const regex = new Regex(PALINDROME_REGEX, "g");
+  const regex = new Regex(PALINDROME_REGEX, "gi");
   return regex.test(s) 
 }
 
 export function hasArabic(s: string): bool {
-  const regex = new Regex(ARABIC_REGEX, "g");
+  const regex = new Regex(ARABIC_REGEX, "gi");
   return regex.test(s) 
 }
 
 export function onlyArabic(s: string): bool {
-  const regex = new Regex("^"+ ARABIC_REGEX + "$", "g");
+  const regex = new Regex("^"+ ARABIC_REGEX + "$", "gi");
   return regex.test(s) 
 }
 

@@ -11,17 +11,16 @@
 
     "codegen-local": "graph codegen --network goerli",
     "build-local": "graph build --network goerli",
-
-    "create-local": "graph create --node http://localhost:8020/ --network goerli ensocean/ensocean-subgraph",
-    "remove-local": "graph remove --node http://localhost:8020/ --network goerli ensocean/ensocean-subgraph",
-    "deploy-local": "graph deploy ensocean/ensocean-subgraph --debug --node http://localhost:8020/ --ipfs http://localhost:5001 --version-label 0.0.1 --network goerli",
+    "create-local": "graph create --node http://graph-local.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
+    "remove-local": "graph remove --node http://graph-local.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
+    "deploy-local": "graph deploy ensocean/ensocean-subgraph --debug --node http://graph-local.ensocean.com/ --ipfs http://ipfs-local.ensocean.com --version-label 0.0.1 --network goerli",
     "setup-local": "yarn codegen-local && yarn build-local  && yarn remove-local && yarn create-local && yarn deploy-local",
-    
+  
     "codegen-test": "graph codegen --network goerli",
     "build-test": "graph build --network goerli",
-    "create-test": "graph create --node https://graphtest.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
-    "remove-test": "graph remove --node https://graphtest.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
-    "deploy-test": "graph deploy ensocean/ensocean-subgraph --debug --node https://graphtest.ensocean.com/ --ipfs https://ipfstest.ensocean.com --version-label 0.0.1 --network goerli",
+    "create-test": "graph create --node https://graph-test.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
+    "remove-test": "graph remove --node https://graph-test.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
+    "deploy-test": "graph deploy ensocean/ensocean-subgraph --debug --node https://graph-test.ensocean.com/ --ipfs https://ipfs-test.ensocean.com --version-label 0.0.1 --network goerli",
     "setup-test": "yarn codegen-test && yarn build-test  && yarn remove-test && yarn create-test && yarn deploy-test",
     
     "codegen-prod": "graph codegen --network mainnet",
