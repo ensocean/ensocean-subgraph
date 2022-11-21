@@ -18,9 +18,9 @@
   
     "codegen-test": "graph codegen --network goerli",
     "build-test": "graph build --network goerli",
-    "create-test": "graph create --node https://graph-test.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
-    "remove-test": "graph remove --node https://graph-test.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
-    "deploy-test": "graph deploy ensocean/ensocean-subgraph --debug --node https://graph-test.ensocean.com/ --ipfs https://ipfs-test.ensocean.com --version-label 0.0.1 --network goerli",
+    "create-test": "graph create --node https://graph-test.ensocean.com/ --network goerli ensocean-subgraph-3",
+    "remove-test": "graph remove --node https://graph-test.ensocean.com/ --network goerli ensocean-subgraph-3",
+    "deploy-test": "graph deploy ensocean-subgraph-3 --debug --node https://graph-test.ensocean.com/ --ipfs https://ipfs-test.ensocean.com --version-label 0.0.1 --network goerli",
     "setup-test": "yarn codegen-test && yarn build-test  && yarn remove-test && yarn create-test && yarn deploy-test",
     
     "codegen-prod": "graph codegen --network mainnet",
