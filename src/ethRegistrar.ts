@@ -60,26 +60,12 @@ export function handleNameRegisteredByControllerOld(event: NameRegisteredByContr
   let blockNumber = event.block.number
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
-
-  const labelHash = crypto.keccak256(ByteArray.fromUTF8(name));
-  if(!labelHash.equals(label)) {
-    log.warning(
-      "Expected '{}' to hash to {}, but got {} instead. Skipping.",
-      [name, labelHash.toHex(), label.toHex()]
-    );
-    return;
-  }
-
-  if(name.indexOf(".") !== -1) {
-    log.warning("Invalid label '{}'. Skipping.", [name]);
-    return;
-  }
  
   let domain = getDomainByLabel(label, blockTimestamp)
-  if(domain.label !== name) {
-    domain.label = name
-    domain.name = name + '.eth' 
-  }
+ 
+  domain.label = name
+  domain.name = name + '.eth'
+ 
 
   domain.hash = label
   domain.owner = owner.toHexString()
@@ -103,26 +89,13 @@ export function handleNameRegisteredByController(event: NameRegisteredByControll
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
 
-  const labelHash = crypto.keccak256(ByteArray.fromUTF8(name));
-  if(!labelHash.equals(label)) {
-    log.warning(
-      "Expected '{}' to hash to {}, but got {} instead. Skipping.",
-      [name, labelHash.toHex(), label.toHex()]
-    );
-    return;
-  }
-
-  if(name.indexOf(".") !== -1) {
-    log.warning("Invalid label '{}'. Skipping.", [name]);
-    return;
-  }
- 
+  //const labelHash = crypto.keccak256(ByteArray.fromUTF8(name));
+   
   let domain = getDomainByLabel(label, blockTimestamp)
-  if(domain.label !== name) {
-    domain.label = name
-    domain.name = name + '.eth' 
-  }
-
+   
+  domain.label = name
+  domain.name = name + '.eth' 
+   
   domain.hash = label
   domain.owner = owner.toHexString()
   domain.registrant = owner.toHexString()
@@ -141,26 +114,11 @@ export function handleNameRenewedByController(event: NameRenewedByController): v
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
 
-  const labelHash = crypto.keccak256(ByteArray.fromUTF8(name));
-  if(!labelHash.equals(label)) {
-    log.warning(
-      "Expected '{}' to hash to {}, but got {} instead. Skipping.",
-      [name, labelHash.toHex(), label.toHex()]
-    );
-    return;
-  }
-
-  if(name.indexOf(".") !== -1) {
-    log.warning("Invalid label '{}'. Skipping.", [name]);
-    return;
-  }
- 
+  //const labelHash = crypto.keccak256(ByteArray.fromUTF8(name));
+    
   let domain = getDomainByLabel(label, blockTimestamp)
-  if(domain.label !== name) {
-    domain.label = name
-    domain.name = name + '.eth' 
-  }
-  
+  domain.label = name
+  domain.name = name + '.eth' 
   domain.hash = label
   domain.expires = expires
   saveDomain(domain, event)
