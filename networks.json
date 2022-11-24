@@ -3,11 +3,7 @@
     "EthRegistrarController": {
       "address": "0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5",
       "startBlock": 2000000
-    },
-    "EthRegistrarControllerOld": {
-      "address": "0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5",
-      "startBlock": 2000000
-    },
+    }, 
     "BaseRegistrarImplementation": {
       "address": "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85",
       "startBlock": 2000000
@@ -25,11 +21,7 @@
     "EthRegistrarController": {
       "address": "0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5",
       "startBlock": 9380471
-    },
-    "EthRegistrarControllerOld": {
-      "address": "0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5",
-      "startBlock": 9380471
-    },
+    }, 
     "BaseRegistrarImplementation": {
       "address": "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85",
       "startBlock": 9380410

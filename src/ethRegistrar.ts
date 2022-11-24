@@ -102,6 +102,15 @@ export function handleNameRegisteredByController(event: NameRegisteredByControll
   domain.registered = blockTimestamp
   domain.expires = expires
   saveDomain(domain, event) 
+
+  let domainEvent = new DomainEvent(createEventID(event))
+  domainEvent.domain = domain.id
+  domainEvent.blockNumber = blockNumber.toI32()
+  domainEvent.transactionID = transactionHash
+  domainEvent.blockTimestamp = blockTimestamp
+  domainEvent.name = "Register" 
+  domainEvent.expires = expires
+  domainEvent.save()  
 }
 
 export function handleNameRenewedByController(event: NameRenewedByController): void {
@@ -122,6 +131,15 @@ export function handleNameRenewedByController(event: NameRenewedByController): v
   domain.hash = label
   domain.expires = expires
   saveDomain(domain, event)
+
+  let domainEvent = new DomainEvent(createEventID(event))
+  domainEvent.domain = domain.id
+  domainEvent.blockNumber = blockNumber.toI32()
+  domainEvent.transactionID = transactionHash
+  domainEvent.blockTimestamp = blockTimestamp
+  domainEvent.name = "Renew" 
+  domainEvent.expires = expires
+  domainEvent.save()  
 }
    
 
@@ -150,16 +168,16 @@ export function handleNameRegisteredByRegistrar(event: NameRegisteredByRegistrar
 
   saveDomain(domain, event)
 
-  let domainEvent = new DomainEvent(createEventID(event))
-  domainEvent.domain = domain.id
-  domainEvent.blockNumber = blockNumber.toI32()
-  domainEvent.transactionID = transactionHash
-  domainEvent.blockTimestamp = blockTimestamp
-  domainEvent.name = "Register" 
-  domainEvent.from = EMPTY_ADDRESS
-  domainEvent.to = owner.toHexString()
-  domainEvent.expires = expires
-  domainEvent.save()  
+  //let domainEvent = new DomainEvent(createEventID(event))
+  //domainEvent.domain = domain.id
+  //domainEvent.blockNumber = blockNumber.toI32()
+  //domainEvent.transactionID = transactionHash
+  //domainEvent.blockTimestamp = blockTimestamp
+  //domainEvent.name = "Register" 
+  //domainEvent.from = EMPTY_ADDRESS
+  //domainEvent.to = owner.toHexString()
+  //domainEvent.expires = expires
+  //domainEvent.save()  
 }
 
 export function handleNameRenewedByRegistrar(event: NameRenewedByRegistrar): void {
@@ -177,14 +195,14 @@ export function handleNameRenewedByRegistrar(event: NameRenewedByRegistrar): voi
   domain.hash = Bytes.fromByteArray(label)
   saveDomain(domain, event)
 
-  let domainEvent = new DomainEvent(createEventID(event))
-  domainEvent.domain = domain.id
-  domainEvent.blockNumber = blockNumber.toI32()
-  domainEvent.transactionID = transactionHash
-  domainEvent.blockTimestamp = blockTimestamp
-  domainEvent.name = "Renew" 
-  domainEvent.expires = expires
-  domainEvent.save()  
+  //let domainEvent = new DomainEvent(createEventID(event))
+  //domainEvent.domain = domain.id
+  //domainEvent.blockNumber = blockNumber.toI32()
+  //domainEvent.transactionID = transactionHash
+  //domainEvent.blockTimestamp = blockTimestamp
+  //domainEvent.name = "Renew" 
+  //domainEvent.expires = expires
+  //domainEvent.save()  
 }
 
 export function handleNameTransferredByRegistrar(event: NameTransferredByRegistrar): void {
@@ -203,24 +221,24 @@ export function handleNameTransferredByRegistrar(event: NameTransferredByRegistr
   domain.hash = Bytes.fromByteArray(label)
   saveDomain(domain, event)
 
-  let domainEvent = new DomainEvent(createEventID(event))
-  domainEvent.domain = domain.id
-  domainEvent.blockNumber = blockNumber.toI32()
-  domainEvent.transactionID = transactionHash
-  domainEvent.blockTimestamp = blockTimestamp
-  domainEvent.from = from.toHexString()
-  domainEvent.to = to.toHexString()
+  //let domainEvent = new DomainEvent(createEventID(event))
+  //domainEvent.domain = domain.id
+  //domainEvent.blockNumber = blockNumber.toI32()
+  //domainEvent.transactionID = transactionHash
+  //domainEvent.blockTimestamp = blockTimestamp
+  //domainEvent.from = from.toHexString()
+  //domainEvent.to = to.toHexString()
   
 
-  if(from.toHexString() == EMPTY_ADDRESS) {
-    domainEvent.name = "Mint";
-  } else if(to.toHexString() == EMPTY_ADDRESS) {
-    domainEvent.name = "Burn";
-  } else {
-    domainEvent.name = "Transfer";
-  }
+  //if(from.toHexString() == EMPTY_ADDRESS) {
+  //  domainEvent.name = "Mint";
+  //} else if(to.toHexString() == EMPTY_ADDRESS) {
+  //  domainEvent.name = "Burn";
+  //} else {
+  //  domainEvent.name = "Transfer";
+  //}
   
-  domainEvent.save() 
+  //domainEvent.save() 
 }
  
 export function handleTransferByRegistry(event: NameTransferredByRegistry): void {

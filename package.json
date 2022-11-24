@@ -18,16 +18,16 @@
   
     "codegen-test": "graph codegen --network goerli",
     "build-test": "graph build --network goerli",
-    "create-test": "graph create --node https://graph-test.ensocean.com/ --network goerli ensocean-subgraph-3",
-    "remove-test": "graph remove --node https://graph-test.ensocean.com/ --network goerli ensocean-subgraph-3",
-    "deploy-test": "graph deploy ensocean-subgraph-3 --debug --node https://graph-test.ensocean.com/ --ipfs https://ipfs-test.ensocean.com --version-label 0.0.1 --network goerli",
+    "create-test": "graph create --node https://graph-test.ensocean.com/ --network goerli ensocean-subgraph-2",
+    "remove-test": "graph remove --node https://graph-test.ensocean.com/ --network goerli ensocean-subgraph-2",
+    "deploy-test": "graph deploy ensocean-subgraph-2 --debug --node https://graph-test.ensocean.com/ --ipfs https://ipfs-test.ensocean.com --version-label 0.0.1 --network goerli",
     "setup-test": "yarn codegen-test && yarn build-test  && yarn remove-test && yarn create-test && yarn deploy-test",
     
     "codegen-prod": "graph codegen --network mainnet",
     "build-prod": "graph build --network mainnet",
-    "create-prod": "graph create --node https://graph.ensocean.com/ --network mainnet ensocean/ensocean-subgraph",
-    "remove-prod": "graph remove --node https://graph.ensocean.com/ --network mainnet ensocean/ensocean-subgraph",
-    "deploy-prod": "graph deploy ensocean/ensocean-subgraph --debug --node https://graph.ensocean.com/ --ipfs https://ipfs.ensocean.com --version-label 0.0.1 --network mainnet",
+    "create-prod": "graph create --node https://graph.ensocean.com/ --network mainnet ensocean-subgraph-2",
+    "remove-prod": "graph remove --node https://graph.ensocean.com/ --network mainnet ensocean-subgraph-2",
+    "deploy-prod": "graph deploy ensocean-subgraph-2 --debug --node https://graph.ensocean.com/ --ipfs https://ipfs.ensocean.com --version-label 0.0.1 --network mainnet",
     "setup-prod": "yarn codegen-prod && yarn build-prod  && yarn remove-prod && yarn create-prod && yarn deploy-prod"
     
     
