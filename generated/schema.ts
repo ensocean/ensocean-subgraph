@@ -42,23 +42,6 @@ export class Domain extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
-  get name(): string | null {
-    let value = this.get("name");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set name(value: string | null) {
-    if (!value) {
-      this.unset("name");
-    } else {
-      this.set("name", Value.fromString(<string>value));
-    }
-  }
-
   get label(): string | null {
     let value = this.get("label");
     if (!value || value.kind == ValueKind.NULL) {
@@ -73,23 +56,6 @@ export class Domain extends Entity {
       this.unset("label");
     } else {
       this.set("label", Value.fromString(<string>value));
-    }
-  }
-
-  get hash(): Bytes | null {
-    let value = this.get("hash");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set hash(value: Bytes | null) {
-    if (!value) {
-      this.unset("hash");
-    } else {
-      this.set("hash", Value.fromBytes(<Bytes>value));
     }
   }
 

@@ -7,10 +7,8 @@ type _Schema_
   )
 
 type Domain @entity {
-  id: Bytes!
-  name: String
-  label: String
-  hash: Bytes
+  id: Bytes! 
+  label: String 
   owner: String
   expires: BigInt
   registrant: String
