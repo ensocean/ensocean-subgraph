@@ -52,6 +52,7 @@ function makeSubnode(event:NameNewOwnerByRegistry): string {
   
 export function handleNameRegisteredByController(event: NameRegisteredByController): void {
     
+  let cost = event.params.cost
   let expires = event.params.expires
   let hash = event.params.label
   let name = event.params.name
@@ -59,9 +60,7 @@ export function handleNameRegisteredByController(event: NameRegisteredByControll
   let blockNumber = event.block.number
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
-
-  //const labelHash = crypto.keccak256(ByteArray.fromUTF8(name));
-   
+ 
   let domain = getDomainByLabelHash(hash, blockTimestamp) 
   domain.label = name  
   domain.owner = owner.toHexString()
@@ -76,6 +75,8 @@ export function handleNameRegisteredByController(event: NameRegisteredByControll
   domainEvent.transactionID = transactionHash
   domainEvent.blockTimestamp = blockTimestamp
   domainEvent.name = "Register" 
+  domainEvent.from = domain.owner;
+  domainEvent.cost = cost;
   domainEvent.expires = expires
   domainEvent.save()  
 }
@@ -89,9 +90,7 @@ export function handleNameRenewedByController(event: NameRenewedByController): v
   let blockNumber = event.block.number
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
-
-  //const labelHash = crypto.keccak256(ByteArray.fromUTF8(name));
-    
+ 
   let domain = getDomainByLabelHash(hash, blockTimestamp)
   domain.label = name  
   domain.expires = expires
@@ -102,6 +101,8 @@ export function handleNameRenewedByController(event: NameRenewedByController): v
   domainEvent.blockNumber = blockNumber.toI32()
   domainEvent.transactionID = transactionHash
   domainEvent.blockTimestamp = blockTimestamp
+  domainEvent.from = domain.owner;
+  domainEvent.cost = cost;
   domainEvent.name = "Renew" 
   domainEvent.expires = expires
   domainEvent.save()  
@@ -132,17 +133,6 @@ export function handleNameRegisteredByRegistrar(event: NameRegisteredByRegistrar
   }
 
   saveDomain(domain, event)
-
-  //let domainEvent = new DomainEvent(createEventID(event))
-  //domainEvent.domain = domain.id
-  //domainEvent.blockNumber = blockNumber.toI32()
-  //domainEvent.transactionID = transactionHash
-  //domainEvent.blockTimestamp = blockTimestamp
-  //domainEvent.name = "Register" 
-  //domainEvent.from = EMPTY_ADDRESS
-  //domainEvent.to = owner.toHexString()
-  //domainEvent.expires = expires
-  //domainEvent.save()  
 }
 
 export function handleNameRenewedByRegistrar(event: NameRenewedByRegistrar): void {
@@ -158,16 +148,7 @@ export function handleNameRenewedByRegistrar(event: NameRenewedByRegistrar): voi
   let domain = getDomainByLabelHash(hash, blockTimestamp)
 
   domain.expires = expires 
-  saveDomain(domain, event)
-
-  //let domainEvent = new DomainEvent(createEventID(event))
-  //domainEvent.domain = domain.id
-  //domainEvent.blockNumber = blockNumber.toI32()
-  //domainEvent.transactionID = transactionHash
-  //domainEvent.blockTimestamp = blockTimestamp
-  //domainEvent.name = "Renew" 
-  //domainEvent.expires = expires
-  //domainEvent.save()  
+  saveDomain(domain, event)  
 }
 
 export function handleNameTransferredByRegistrar(event: NameTransferredByRegistrar): void {
@@ -184,26 +165,7 @@ export function handleNameTransferredByRegistrar(event: NameTransferredByRegistr
   let domain = getDomainByLabelHash(hash, blockTimestamp) 
 
   domain.owner = to.toHexString() 
-  saveDomain(domain, event)
-
-  //let domainEvent = new DomainEvent(createEventID(event))
-  //domainEvent.domain = domain.id
-  //domainEvent.blockNumber = blockNumber.toI32()
-  //domainEvent.transactionID = transactionHash
-  //domainEvent.blockTimestamp = blockTimestamp
-  //domainEvent.from = from.toHexString()
-  //domainEvent.to = to.toHexString()
-  
-
-  //if(from.toHexString() == EMPTY_ADDRESS) {
-  //  domainEvent.name = "Mint";
-  //} else if(to.toHexString() == EMPTY_ADDRESS) {
-  //  domainEvent.name = "Burn";
-  //} else {
-  //  domainEvent.name = "Transfer";
-  //}
-  
-  //domainEvent.save() 
+  saveDomain(domain, event) 
 }
  
 export function handleTransferByRegistry(event: NameTransferredByRegistry): void {
@@ -213,19 +175,9 @@ export function handleTransferByRegistry(event: NameTransferredByRegistry): void
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
    
-  //let domain = getDomainByLabelHash(node, blockTimestamp)
-  //domain.owner = owner.toHex()
-  //saveDomain(domain, event)
-
-  //let domainEvent = new DomainEvent(createEventID(event))
-  //domainEvent.domain = domain.id
-  //domainEvent.blockNumber = blockNumber.toI32()
-  //domainEvent.transactionID = transactionHash
-  //domainEvent.blockTimestamp = blockTimestamp
-  //domainEvent.name = "Transfer"
-  //domainEvent.from = EMPTY_ADDRESS
-  //domainEvent.to = owner.toHex()
-  //domainEvent.save()  
+  let domain = getDomainByLabelHash(node, blockTimestamp)
+  domain.owner = owner.toHex()
+  saveDomain(domain, event)
 } 
 
 export function handleNewOwnerByRegistry(event: NameNewOwnerByRegistry): void { 
@@ -264,16 +216,6 @@ function _handleNewOwner(event: NameNewOwnerByRegistry): void {
  
   domain.owner = owner.toHex() 
   saveDomain(domain, event)
- 
-  //let domainEvent = new DomainEvent(createEventID(event))
-  //domainEvent.domain = domain.id
-  //domainEvent.blockNumber = blockNumber.toI32()
-  //domainEvent.transactionID = transactionHash
-  //domainEvent.blockTimestamp = blockTimestamp
-  //domainEvent.name = "NewOwner"
-  //domainEvent.from = EMPTY_ADDRESS
-  //domainEvent.to = owner.toHex()
-  //domainEvent.save()
 } 
 
 function saveDomain(domain: Domain, event: ethereum.Event): void {
@@ -281,7 +223,7 @@ function saveDomain(domain: Domain, event: ethereum.Event): void {
       if(domain.label != null) {
         if(!checkByteLength(domain.label!)) return;
   
-        log.warning("label: {} ", [domain.label!]);
+        //log.warning("label: {} ", [domain.label!]);
   
         domain.length = getLength(domain.label!)
         domain.segmentLength = getSegmentLength(domain.label!)

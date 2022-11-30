@@ -1,32 +1,23 @@
 
-# Mainnet
+# EnsOcean Subgraph
+This repo was built for indexing ENS contract logs to get register, renew, transfer events based on
+[ENS Subgraph repo](https://github.com/ensdomains/ens-subgraph)
 
-EnsRegistryOld: 3327417
-EnsRegistry: 9380380
-BaseRegistrar: 9380410
-RegistrarController: 9380471
+# 1. Install Dependencies
 
-# Goerli
+```shell
+$ yarn install
+```
 
-EnsRegistryOld: 3327417
-EnsRegistry: 9380380
-BaseRegistrar: 9380410
-RegistrarController: 9380471
+# 2. Deploy
+## a. Mainnet
+```shell
+$ export GRAPH_AUTH_KEY=xxx && yarn deploy
+```
+## a. Goerli
+```shell
+$ export GRAPH_AUTH_KEY=xxx && yarn deploy-test
+```
  
 
-
-# envs
-
-      GRAPH_LOG: info
-      GRAPH_ALLOW_NON_DETERMINISTIC_FULLTEXT_SEARCH: 'true'
-      ETHEREUM_BLOCK_CHUNK_SIZE: 1000
-      ETHEREUM_BLOCK_BATCH_SIZE: 5 #defaults to 10
-      ETHEREUM_POLLING_INTERVAL: 1000 #defaults to 500ms
-      EARLY_LOG_CHUNK_SIZE: 1000
-      GRAPH_QUERY_CACHE_MAX_MEM: 1024
-      GRAPH_GRAPHQL_MAX_SKIP: 5000
-      GRAPH_GRAPHQL_MAX_FIRST: 1000
-      GRAPH_GRAPHQL_QUERY_TIMEOUT: 30
-      SUBSCRIPTION_THROTTLE_INTERVAL: 3000
-      ETHEREUM_RPC_PARALLEL_REQUESTS: 2 
-      GRAPH_ALLOW_NON_DETERMINISTIC_IPFS: 'true'
+ 

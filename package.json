@@ -1,43 +1,32 @@
 {
   "name": "ens-subgraph",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "type": "commonjs",
   "scripts": {
     "codegen": "graph codegen --network mainnet",
     "build": "graph build --network mainnet",
-    "test": "graph test --network mainnet",
-    "deploy": "graph auth --product hosted-service c7eb11d1b9d59cd2ef3f6c0935c43803 && graph deploy --product hosted-service ensocean/ensocean-subgraph",
-    "setup-remote": "yarn codegen && yarn build && yarn deploy",
 
-    "codegen-local": "graph codegen --network goerli",
-    "build-local": "graph build --network goerli",
-    "create-local": "graph create --node http://graph-local.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
-    "remove-local": "graph remove --node http://graph-local.ensocean.com/ --network goerli ensocean/ensocean-subgraph",
-    "deploy-local": "graph deploy ensocean/ensocean-subgraph --debug --node http://graph-local.ensocean.com/ --ipfs http://ipfs-local.ensocean.com --version-label 0.0.1 --network goerli",
-    "setup-local": "yarn codegen-local && yarn build-local  && yarn remove-local && yarn create-local && yarn deploy-local",
-  
-    "codegen-test": "graph codegen --network goerli",
-    "build-test": "graph build --network goerli",
-    "create-test": "graph create --node https://graph-test.ensocean.com/ --network goerli ensocean-subgraph-2",
-    "remove-test": "graph remove --node https://graph-test.ensocean.com/ --network goerli ensocean-subgraph-2",
-    "deploy-test": "graph deploy ensocean-subgraph-2 --debug --node https://graph-test.ensocean.com/ --ipfs https://ipfs-test.ensocean.com --version-label 0.0.1 --network goerli",
-    "setup-test": "yarn codegen-test && yarn build-test  && yarn remove-test && yarn create-test && yarn deploy-test",
+    "codegen-goerli": "graph codegen --network goerli",
+    "build-goerli": "graph build --network goerli",
+
+    "auth": "graph auth --product hosted-service $GRAPH_AUTH_HOSTED_KEY",
+    "auth-studio": "graph auth --studio $GRAPH_AUTH_STUDIO_KEY",
     
-    "codegen-prod": "graph codegen --network mainnet",
-    "build-prod": "graph build --network mainnet",
-    "create-prod": "graph create --node https://graph.ensocean.com/ --network mainnet ensocean-subgraph-2",
-    "remove-prod": "graph remove --node https://graph.ensocean.com/ --network mainnet ensocean-subgraph-2",
-    "deploy-prod": "graph deploy ensocean-subgraph-2 --debug --node https://graph.ensocean.com/ --ipfs https://ipfs.ensocean.com --version-label 0.0.1 --network mainnet",
-    "setup-prod": "yarn codegen-prod && yarn build-prod  && yarn remove-prod && yarn create-prod && yarn deploy-prod"
+    "test": "graph test --network mainnet",
     
+    "deploy": "yarn auth && graph deploy --product hosted-service ensocean/ensocean-subgraph",
+    "deploy-test": "yarn auth && graph deploy --product hosted-service ensocean/ensocean-subgraph-goerli --network goerli",
     
+    "setup-remote": "yarn codegen && yarn build && yarn deploy", 
+    "setup-remote-test": "yarn codegen-goerli && yarn build-goerli && yarn deploy-goerli", 
+ 
+    "setup-studio": "yarn codegen && yarn build && yarn yarn auth-studio && graph deploy --studio ensocean",
+    "setup-studio-test": "yarn codegen-goerli && yarn build-goerli && yarn auth-studio && graph deploy --studio ensocean-goerli --network goerli"
   },
   "dependencies": {
     "@ensdomains/content-hash": "^2.5.3",
     "@graphprotocol/graph-cli": "0.35.0",
     "@graphprotocol/graph-ts": "^0.28.1",
     "assemblyscript-regex": "^1.6.4"
-  }
- 
-
+  } 
 }
