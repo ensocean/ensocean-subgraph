@@ -208,10 +208,7 @@ function _handleNewOwner(event: NameNewOwnerByRegistry): void {
     if (label != null) {
       domain.label = label
     }
-    
-    if(label === null) {
-      label = '[' + hash .toHexString().slice(2) + ']'
-    } 
+     
   }
  
   domain.owner = owner.toHex() 
