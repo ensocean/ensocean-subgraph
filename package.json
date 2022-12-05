@@ -5,28 +5,25 @@
   "scripts": {
     "codegen": "graph codegen --network mainnet",
     "build": "graph build --network mainnet",
-
     "codegen-goerli": "graph codegen --network goerli",
     "build-goerli": "graph build --network goerli",
-
     "auth": "graph auth --product hosted-service $GRAPH_AUTH_HOSTED_KEY",
     "auth-studio": "graph auth --studio $GRAPH_AUTH_STUDIO_KEY",
-    
-    "test": "graph test --network mainnet",
-    
+    "test": "graph test --network goerli",
     "deploy": "yarn auth && graph deploy --product hosted-service ensocean/ensocean-subgraph",
-    "deploy-test": "yarn auth && graph deploy --product hosted-service ensocean/ensocean-subgraph-goerli --network goerli",
-    
-    "setup-remote": "yarn codegen && yarn build && yarn deploy", 
-    "setup-remote-test": "yarn codegen-goerli && yarn build-goerli && yarn deploy-goerli", 
- 
+    "deploy-goerli": "yarn auth && graph deploy --product hosted-service ensocean/ensocean-subgraph-goerli --network goerli",
+    "setup-remote": "yarn codegen && yarn build && yarn deploy",
+    "setup-remote-goerli": "yarn codegen-goerli && yarn build-goerli && yarn deploy-goerli",
     "setup-studio": "yarn codegen && yarn build && yarn yarn auth-studio && graph deploy --studio ensocean",
-    "setup-studio-test": "yarn codegen-goerli && yarn build-goerli && yarn auth-studio && graph deploy --studio ensocean-goerli --network goerli"
+    "setup-studio-goerli": "yarn codegen-goerli && yarn build-goerli && yarn auth-studio && graph deploy --studio ensocean-goerli --network goerli"
   },
   "dependencies": {
     "@ensdomains/content-hash": "^2.5.3",
     "@graphprotocol/graph-cli": "0.35.0",
     "@graphprotocol/graph-ts": "^0.28.1",
     "assemblyscript-regex": "^1.6.4"
-  } 
+  },
+  "devDependencies": {
+    "matchstick-as": "^0.5.0"
+  }
 }

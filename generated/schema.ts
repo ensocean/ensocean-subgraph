@@ -42,6 +42,23 @@ export class Domain extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
+  get name(): string | null {
+    let value = this.get("name");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set name(value: string | null) {
+    if (!value) {
+      this.unset("name");
+    } else {
+      this.set("name", Value.fromString(<string>value));
+    }
+  }
+
   get label(): string | null {
     let value = this.get("label");
     if (!value || value.kind == ValueKind.NULL) {

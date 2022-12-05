@@ -45,11 +45,7 @@ function checkByteLength(name: string): boolean {
   }
   return false
 }
-  
-function makeSubnode(event:NameNewOwnerByRegistry): string {
-  return crypto.keccak256(concat(event.params.node, event.params.label)).toHexString()
-}
-  
+   
 export function handleNameRegisteredByController(event: NameRegisteredByController): void {
     
   let cost = event.params.cost
@@ -75,7 +71,7 @@ export function handleNameRegisteredByController(event: NameRegisteredByControll
   domainEvent.transactionID = transactionHash
   domainEvent.blockTimestamp = blockTimestamp
   domainEvent.name = "Register" 
-  domainEvent.from = domain.owner;
+  domainEvent.from = owner.toHexString();
   domainEvent.cost = cost;
   domainEvent.expires = expires
   domainEvent.save()  
@@ -107,8 +103,7 @@ export function handleNameRenewedByController(event: NameRenewedByController): v
   domainEvent.expires = expires
   domainEvent.save()  
 }
-   
-
+    
 export function handleNameRegisteredByRegistrar(event: NameRegisteredByRegistrar): void {
 
   let tokenId = event.params.id
@@ -207,8 +202,7 @@ function _handleNewOwner(event: NameNewOwnerByRegistry): void {
     
     if (label != null) {
       domain.label = label
-    }
-     
+    } 
   }
  
   domain.owner = owner.toHex() 
@@ -221,7 +215,7 @@ function saveDomain(domain: Domain, event: ethereum.Event): void {
         if(!checkByteLength(domain.label!)) return;
   
         //log.warning("label: {} ", [domain.label!]);
-  
+        
         domain.length = getLength(domain.label!)
         domain.segmentLength = getSegmentLength(domain.label!)
 
@@ -275,6 +269,7 @@ function saveDomain(domain: Domain, event: ethereum.Event): void {
         }
   
         domain.tags = tags; 
+        domain.name = domain.label + ".eth";
       }  
       domain.extension = "eth"
       domain.save() 
