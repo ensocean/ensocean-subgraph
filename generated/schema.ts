@@ -76,20 +76,20 @@ export class Domain extends Entity {
     }
   }
 
-  get owner(): string | null {
+  get owner(): Bytes | null {
     let value = this.get("owner");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBytes();
     }
   }
 
-  set owner(value: string | null) {
+  set owner(value: Bytes | null) {
     if (!value) {
       this.unset("owner");
     } else {
-      this.set("owner", Value.fromString(<string>value));
+      this.set("owner", Value.fromBytes(<Bytes>value));
     }
   }
 
@@ -110,20 +110,20 @@ export class Domain extends Entity {
     }
   }
 
-  get registrant(): string | null {
+  get registrant(): Bytes | null {
     let value = this.get("registrant");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBytes();
     }
   }
 
-  set registrant(value: string | null) {
+  set registrant(value: Bytes | null) {
     if (!value) {
       this.unset("registrant");
     } else {
-      this.set("registrant", Value.fromString(<string>value));
+      this.set("registrant", Value.fromBytes(<Bytes>value));
     }
   }
 
@@ -325,37 +325,37 @@ export class DomainEvent extends Entity {
     }
   }
 
-  get from(): string | null {
+  get from(): Bytes | null {
     let value = this.get("from");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBytes();
     }
   }
 
-  set from(value: string | null) {
+  set from(value: Bytes | null) {
     if (!value) {
       this.unset("from");
     } else {
-      this.set("from", Value.fromString(<string>value));
+      this.set("from", Value.fromBytes(<Bytes>value));
     }
   }
 
-  get to(): string | null {
+  get to(): Bytes | null {
     let value = this.get("to");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBytes();
     }
   }
 
-  set to(value: string | null) {
+  set to(value: Bytes | null) {
     if (!value) {
       this.unset("to");
     } else {
-      this.set("to", Value.fromString(<string>value));
+      this.set("to", Value.fromBytes(<Bytes>value));
     }
   }
 
@@ -391,5 +391,63 @@ export class DomainEvent extends Entity {
     } else {
       this.set("expires", Value.fromBigInt(<BigInt>value));
     }
+  }
+}
+
+export class Account extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Account entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type Account must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Account", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): Account | null {
+    return changetype<Account | null>(store.get("Account", id.toHexString()));
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get primaryName(): string | null {
+    let value = this.get("primaryName");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set primaryName(value: string | null) {
+    if (!value) {
+      this.unset("primaryName");
+    } else {
+      this.set("primaryName", Value.fromString(<string>value));
+    }
+  }
+
+  get domains(): Array<Bytes> {
+    let value = this.get("domains");
+    return value!.toBytesArray();
+  }
+
+  set domains(value: Array<Bytes>) {
+    this.set("domains", Value.fromBytesArray(value));
   }
 }

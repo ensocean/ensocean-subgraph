@@ -1,18 +1,10 @@
-type _Schema_
-  @fulltext(
-    name: "domainSearch"
-    language: simple
-    algorithm: proximityRank
-    include: [{ entity: "Domain", fields: [{ name: "label" }, { name: "name" }] }]
-  )
-
 type Domain @entity {
   id: Bytes! 
   name: String
   label: String 
-  owner: String
+  owner: Account
   expires: BigInt
-  registrant: String
+  registrant: Account
   registered: BigInt
   created: BigInt
   length: Int
@@ -29,8 +21,14 @@ type DomainEvent @entity(immutable: true) {
   blockTimestamp: BigInt
   domain: Domain!
   name: String
-  from: String
-  to: String
+  from: Account
+  to: Account
   cost: BigInt
   expires: BigInt 
 } 
+
+type Account @entity {
+  id: Bytes! 
+  primaryName: String
+  domains: [Domain!]! @derivedFrom(field: "owner")
+}

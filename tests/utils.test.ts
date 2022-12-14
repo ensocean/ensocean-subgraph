@@ -1,5 +1,29 @@
 import { describe, test, assert } from "matchstick-as/assembly/index"
-import { hasArabic, hasDigit, hasEmoji, hasLetter, hasUnicode, onlyArabic, onlyDigit, onlyEmoji, onlyLetter, onlyUnicode } from "../src/utils" 
+import { getLength, hasArabic, hasDigit, hasEmoji, hasLetter, hasUnicode, isPalindrome, onlyArabic, onlyDigit, onlyEmoji, onlyLetter, onlyUnicode } from "../src/utils" 
+
+describe("getLength()", () => {
+    test("Should return 1", () => {
+        const c = getLength("😀");
+        assert.i32Equals(1, c); 
+    }) 
+
+    test("Should return 3", () => {
+        const c = getLength("abc");
+        assert.i32Equals(3, c); 
+    }) 
+})
+
+describe("isPalindrome()", () => {
+    test("Should return true", () => {
+        const c = isPalindrome("abba");
+        assert.booleanEquals(true, c); 
+    })
+
+    test("Should return false", () => {
+        const c = isPalindrome("abc")
+        assert.booleanEquals(false, c);
+    })
+})
 
 describe("hasUnicode()", () => {
     test("Should return true", () => {
@@ -104,9 +128,28 @@ describe("hasEmoji()", () => {
         assert.booleanEquals(c, true); 
     })
 
+    test("Should return true", () => {
+        const c = hasEmoji("💩💩💩💩");
+        assert.booleanEquals(c, true); 
+    })
+
     test("Should return false", () => {
         const c = hasEmoji("ࢠࢻ1231xcvvcﱖﻶ");
         assert.booleanEquals(c, false);
     })
 })
+
+
+describe("onlyEmoi()", () => {
+    test("Should return true", () => {
+        const c = onlyEmoji("😀");
+        assert.booleanEquals(true, c); 
+    })
+ 
+    test("Should return false", () => {
+        const c = onlyEmoji("a💩💩123");
+        assert.booleanEquals(false, c);
+    })
+})
+
 

@@ -98,3 +98,25 @@ dataSources:
           handler: handleTransferByRegistryOld
         - event: NewOwner(indexed bytes32,indexed bytes32,address)
           handler: handleNewOwnerByRegistryOld
+  - kind: ethereum
+    name: ReverseRegistrar
+    network: goerli
+    source:
+      abi: ReverseRegistrar
+      address: "0xD5610A08E370051a01fdfe4bB3ddf5270af1aA48"
+      startBlock: 2000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/ethRegistrar.ts
+      entities: 
+        - Account
+      abis:
+        - name: ReverseRegistrar
+          file: ./abis/ReverseRegistrar.json
+      callHandlers:
+        - function: setName(string)
+          handler: handleSetName
+        - function: setNameForAddr(address,address,address,string)
+          handler: handleSetNameForAddr

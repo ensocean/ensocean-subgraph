@@ -15,6 +15,14 @@
     "ENSRegistryWithFallbackOld": {
       "address": "0x314159265dd8dbb310642f98f50c066173c1259b",
       "startBlock": 2000000
+    },
+    "ReverseRegistrar": {
+      "address": "0xD5610A08E370051a01fdfe4bB3ddf5270af1aA48",
+      "startBlock": 2000000
+    },
+    "PublicResolver": {
+      "address": "0xE264d5bb84bA3b8061ADC38D3D76e6674aB91852",
+      "startBlock": 2000000
     }
   },
   "mainnet": {
@@ -32,6 +40,14 @@
     },
     "ENSRegistryWithFallbackOld": {
       "address": "0x314159265dd8dbb310642f98f50c066173c1259b",
+      "startBlock": 3327417
+    },
+    "ReverseRegistrar": {
+      "address": "0x084b1c3C81545d370f3634392De611CaaBFf8148",
+      "startBlock": 3327417
+    },
+    "PublicResolver": {
+      "address": "0x4976fb03C32e5B8cfe2b6cCB31c09Ba78EBaBa41",
       "startBlock": 3327417
     }
   }

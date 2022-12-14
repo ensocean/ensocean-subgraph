@@ -2,27 +2,45 @@
 import {
     BigInt,
     ByteArray,
-    ethereum,
-    crypto, 
+    ethereum, 
     Bytes,
-    json,
-    dataSource
+    log
   } from '@graphprotocol/graph-ts'
- 
-import { RegExp as Regex } from 'assemblyscript-regex/assembly/index'
-
-//import { Regex as Regex2 } from 'typescript-dotnet-amd/System/Text/RegularExpressions'
-//import { Regex as Regex2 } from 'typescript-dotnet-umd/System/Text/RegularExpressions'
-//import { Regex as Regex2 } from 'typescript-dotnet-system/System/Text/RegularExpressions'
-//import { Regex as Regex2 } from 'typescript-dotnet-es6/System/Text/RegularExpressions'
+  
+import { EMOJI_LIST } from './emoji-list'
  
 export const EMPTY_NODE = '0x0000000000000000000000000000000000000000000000000000000000000000'
 export const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000'
 export const ROOT_NODE:ByteArray = byteArrayFromHex("93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae")
 export const MAX_BYTE_LENGTH = 8191
 export const BIG_INT_ZERO = BigInt.fromI32(0)
- 
-const PALINDROME_REGEX = `^\b(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*(?:(\w)[ \t,'"]*\11?[ \t,'"]*\10|\10?)[ \t,'"]*\9|\9?)[ \t,'"]*\8|\8?)[ \t,'"]*\7|\7?)[ \t,'"]*\6|\6?)[ \t,'"]*\5|\5?)[ \t,'"]*\4|\4?)[ \t,'"]*\3|\3?)[ \t,'"]*\2|\2?))?[ \t,'"]*\1\b$`
+  
+function decodeName (buf:Bytes):Array<string> {
+  let offset = 0
+  let list = Bytes.fromHexString('')
+  let dot = Bytes.fromHexString('2e')
+  let len = buf[offset++]
+  let hex = buf.toHexString()
+  let firstLabel = ''
+  if (len === 0) {
+    return [firstLabel, '.']
+  }
+  
+  while (len) {
+    let label = hex.slice((offset +1 ) * 2, (offset + 1 + len ) * 2)
+    let labelBytes = Bytes.fromHexString(label)
+  
+    if(offset > 1){
+      list = concat(list, dot)
+    }else{
+      firstLabel = labelBytes.toString()
+    }
+    list = concat(list, labelBytes)
+    offset += len
+    len = buf[offset++]
+  }
+  return [firstLabel, list.toString()]
+}
 
 export function createEventID(event:  ethereum.Event): Bytes {
     return Bytes.fromUTF8( event.block.number.toString().concat('-').concat(event.logIndex.toString() ));
@@ -65,7 +83,7 @@ export function getLength(s: string): i32 {
 }
 
 export function getSegmentLength(s: string): i32 {
-  return ByteArray.fromUTF8(s).length
+  return String.UTF8.byteLength(s)
 }
 
 export function isLetter(codePoint: number): bool {
@@ -135,16 +153,7 @@ export function onlyUnicode(s: string): bool {
 }
 
 export function isEmoji(codePoint: number): bool {
-  if(codePoint >= 0x1F600 && codePoint <= 0x1F64F) return true; 
-  if(codePoint >= 0x1F680 && codePoint <= 0x1F6FF) return true; 
-  if(codePoint >= 0x1F900 && codePoint <= 0x1F9FF) return true; 
-  if(codePoint >= 0x1F300 && codePoint <= 0x1F6FF) return true; 
-  if(codePoint >= 0x1F970 && codePoint <= 0x1F972) return true;
-  if(codePoint >= 0x1F60B && codePoint <= 0x1F911) return true;
-  if(codePoint >= 0x1F917 && codePoint <= 0x1FAE1) return true;
-  if(codePoint >= 0x1F910 && codePoint <= 0x1FAE8) return true;
-  if(codePoint >= 0x1F60C && codePoint <= 0x1F634) return true;
-  	
+  if(EMOJI_LIST.includes(codePoint)) return true;
   return false;
 }
 
@@ -156,17 +165,18 @@ export function hasEmoji(s: string): bool {
   return false;
 }
 
-export function onlyEmoji(s: string): bool {
-  for(let i = 0; i < s.length; i++) {
+export function onlyEmoji(s: string): bool { 
+  for(let i = 0; i < getLength(s); i++) { 
     let codePoint = s.codePointAt(i);
-    if(!isEmoji(codePoint)) return false;
+    if(isEmoji(codePoint) == false) {
+      return false;
+    }
   } 
   return true;
 }
 
 export function isPalindrome(s: string): bool {
-  const regex = new Regex(PALINDROME_REGEX, "gi");
-  return regex.test(s) 
+  return s == s.split('').reverse().join('').toString();
 }
  
 export function isArabic(codePoint: number): bool {

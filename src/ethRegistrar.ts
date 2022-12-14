@@ -1,18 +1,12 @@
 import { 
-  BigInt, 
-  ByteArray,
-  Bytes,
-  crypto, 
-  log,
-  ens,
-  ethereum
+  BigInt,  
+  Bytes, 
+  log, 
+  ethereum,
+  crypto,
+  ByteArray
 } from "@graphprotocol/graph-ts"
-
-import { 
-  NameRegistered as NameRegisteredByControllerOld,
-  NameRenewed as NameRenewedByControllerOld
-} from "../generated/ETHRegistrarControllerOld/ETHRegistrarControllerOld"
-
+ 
 import { 
   NameRegistered as NameRegisteredByController,
   NameRenewed as NameRenewedByController
@@ -30,13 +24,13 @@ import {
 } from "../generated/ENSRegistryWithFallback/ENSRegistryWithFallback"
 
 import {  
-  NewOwner as NameNewOwnerByRegistryOld,
-  Transfer as NameTransferredByRegistryOld
-} from "../generated/ENSRegistryWithFallbackOld/ENSRegistryWithFallback"
+  SetNameCall,
+  SetNameForAddrCall
+} from "../generated/ReverseRegistrar/ReverseRegistrar"
   
-import { Domain, DomainEvent } from "../generated/schema"
+import { Domain, DomainEvent, Account } from "../generated/schema"
 
-import {  concat, createEventID, uint256ToByteArray, byteArrayFromHex, MAX_BYTE_LENGTH, ROOT_NODE, EMPTY_ADDRESS, EMPTY_NODE, BIG_INT_ZERO, hasDigit, hasEmoji, hasUnicode, onlyLetter, onlyDigit, onlyEmoji, onlyUnicode, getLength, getSegmentLength, hasLetter, isPalindrome, hasArabic, onlyArabic } from "./utils"
+import {  createEventID, uint256ToByteArray, byteArrayFromHex, MAX_BYTE_LENGTH, ROOT_NODE, EMPTY_ADDRESS, EMPTY_NODE, BIG_INT_ZERO, hasDigit, hasEmoji, hasUnicode, onlyLetter, onlyDigit, onlyEmoji, onlyUnicode, getLength, getSegmentLength, hasLetter, isPalindrome, hasArabic, onlyArabic } from "./utils"
  
 function checkByteLength(name: string): boolean {
   let byteLength = Bytes.fromUTF8(name).byteLength
@@ -44,6 +38,21 @@ function checkByteLength(name: string): boolean {
     return true
   }
   return false
+}
+ 
+export function handleSetName(call: SetNameCall): void {
+  const name = call.inputs.name 
+  let account = getAccount(call.from)
+  account.primaryName = name;
+  saveAccount(account);
+}
+
+export function handleSetNameForAddr(call: SetNameForAddrCall): void {
+  const addr = call.inputs.addr 
+  const name = call.inputs.name 
+  let account = getAccount(addr)
+  account.primaryName = name;
+  saveAccount(account);
 }
    
 export function handleNameRegisteredByController(event: NameRegisteredByController): void {
@@ -57,10 +66,13 @@ export function handleNameRegisteredByController(event: NameRegisteredByControll
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
  
+  let _owner = getAccount(owner);
+  saveAccount(_owner)
+
   let domain = getDomainByLabelHash(hash, blockTimestamp) 
   domain.label = name  
-  domain.owner = owner.toHexString()
-  domain.registrant = owner.toHexString()
+  domain.owner = _owner.id
+  domain.registrant = _owner.id
   domain.registered = blockTimestamp
   domain.expires = expires
   saveDomain(domain, event) 
@@ -71,7 +83,7 @@ export function handleNameRegisteredByController(event: NameRegisteredByControll
   domainEvent.transactionID = transactionHash
   domainEvent.blockTimestamp = blockTimestamp
   domainEvent.name = "Register" 
-  domainEvent.from = owner.toHexString();
+  domainEvent.from = _owner.id
   domainEvent.cost = cost;
   domainEvent.expires = expires
   domainEvent.save()  
@@ -86,18 +98,21 @@ export function handleNameRenewedByController(event: NameRenewedByController): v
   let blockNumber = event.block.number
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
- 
+   
   let domain = getDomainByLabelHash(hash, blockTimestamp)
   domain.label = name  
   domain.expires = expires
   saveDomain(domain, event)
+
+  let _owner = getAccount(domain.owner!);
+  saveAccount(_owner)
 
   let domainEvent = new DomainEvent(createEventID(event))
   domainEvent.domain = domain.id
   domainEvent.blockNumber = blockNumber.toI32()
   domainEvent.transactionID = transactionHash
   domainEvent.blockTimestamp = blockTimestamp
-  domainEvent.from = domain.owner;
+  domainEvent.from = _owner.id
   domainEvent.cost = cost;
   domainEvent.name = "Renew" 
   domainEvent.expires = expires
@@ -117,16 +132,14 @@ export function handleNameRegisteredByRegistrar(event: NameRegisteredByRegistrar
   let hash = Bytes.fromByteArray(label)
   let domain = getDomainByLabelHash(hash, blockTimestamp)
   
-  domain.owner = owner.toHexString()
-  domain.registrant = owner.toHexString()
+  let _owner = getAccount(owner);
+  saveAccount(_owner)
+
+  domain.owner = _owner.id
+  domain.registrant = _owner.id
   domain.registered = blockTimestamp
   domain.expires = expires 
-
-  let labelName = ens.nameByHash(hash.toHexString())
-  if (labelName !== null) { 
-    domain.label = labelName  
-  }
-
+ 
   saveDomain(domain, event)
 }
 
@@ -159,7 +172,10 @@ export function handleNameTransferredByRegistrar(event: NameTransferredByRegistr
   let hash = Bytes.fromByteArray(label)
   let domain = getDomainByLabelHash(hash, blockTimestamp) 
 
-  domain.owner = to.toHexString() 
+  let _owner = getAccount(to)
+  saveAccount(_owner)
+
+  domain.owner = _owner.id
   saveDomain(domain, event) 
 }
  
@@ -170,8 +186,11 @@ export function handleTransferByRegistry(event: NameTransferredByRegistry): void
   let transactionHash = event.transaction.hash
   let blockTimestamp = event.block.timestamp
    
+  let _owner = getAccount(owner)
+  saveAccount(_owner)
+
   let domain = getDomainByLabelHash(node, blockTimestamp)
-  domain.owner = owner.toHex()
+  domain.owner = _owner.id
   saveDomain(domain, event)
 } 
 
@@ -197,17 +216,30 @@ function _handleNewOwner(event: NameNewOwnerByRegistry): void {
    
   let domain = getDomainByLabelHash(hash, blockTimestamp)
  
-  if(domain.label === null) { 
-    let label = ens.nameByHash(hash.toHexString())
-    
-    if (label != null) {
-      domain.label = label
-    } 
-  }
+  let _owner = getAccount(owner)
+  saveAccount(_owner)
  
-  domain.owner = owner.toHex() 
+  domain.owner = _owner.id
   saveDomain(domain, event)
 } 
+
+function getAccount(id: Bytes): Account {
+  let account = Account.load(id)
+  if(account === null) {
+    return createAccount(id)
+  }else{
+    return account
+  }
+}
+
+function createAccount(id: Bytes): Account {
+  let account = new Account(id)  
+  return account
+}
+
+function saveAccount(account: Account): void {
+  account.save()
+}
 
 function saveDomain(domain: Domain, event: ethereum.Event): void {
   if(domain != null ) {  
