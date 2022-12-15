@@ -6,6 +6,8 @@ import {
     Bytes,
     log
   } from '@graphprotocol/graph-ts'
+
+
   
 import { EMOJI_LIST } from './emoji-list'
  
@@ -79,11 +81,19 @@ export function uint256ToByteArray(i: BigInt): ByteArray {
 }
 
 export function getLength(s: string): i32 {
+  return s.split('').length
+}
+  
+export function getSegmentLength(s: string): i32 {
   return s.length
 }
 
-export function getSegmentLength(s: string): i32 {
-  return String.UTF8.byteLength(s)
+export function decode_utf16_pair(units: number[]): number
+{ 
+    let code = 0x10000;
+    code += (units[0] & 0x03FF) << 10;
+    code += (units[1] & 0x03FF);
+    return code;
 }
 
 export function isLetter(codePoint: number): bool {
@@ -145,7 +155,7 @@ export function hasUnicode(s: string): bool {
 }
 
 export function onlyUnicode(s: string): bool {
-  for(let i = 0; i < s.length; i++) {
+  for(let i = 0; i < getLength(s); i++) {
     let codePoint = s.codePointAt(i);
     if(isAscii(codePoint)) return false;
   } 
@@ -199,7 +209,7 @@ export function hasArabic(s: string): bool {
 }
 
 export function onlyArabic(s: string): bool {
-  for(let i = 0; i < s.length; i++) {
+  for(let i = 0; i < getLength(s); i++) {
     let codePoint = s.codePointAt(i);
     if(!isArabic(codePoint)) return false;
   } 

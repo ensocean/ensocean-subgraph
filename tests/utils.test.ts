@@ -1,15 +1,11 @@
 import { describe, test, assert } from "matchstick-as/assembly/index"
-import { getLength, hasArabic, hasDigit, hasEmoji, hasLetter, hasUnicode, isPalindrome, onlyArabic, onlyDigit, onlyEmoji, onlyLetter, onlyUnicode } from "../src/utils" 
+import { getCodeUnits, getLength, getSegmentLength, hasArabic, hasDigit, hasEmoji, hasLetter, hasUnicode, isPalindrome, onlyArabic, onlyDigit, onlyEmoji, onlyLetter, onlyUnicode } from "../src/utils" 
 
+ 
 describe("getLength()", () => {
-    test("Should return 1", () => {
-        const c = getLength("😀");
-        assert.i32Equals(1, c); 
-    }) 
-
-    test("Should return 3", () => {
-        const c = getLength("abc");
-        assert.i32Equals(3, c); 
+    test("Should return true", () => {
+        const c = getLength("😀😀");
+        assert.stringEquals("a", c.toString()); 
     }) 
 })
 
@@ -21,6 +17,11 @@ describe("isPalindrome()", () => {
 
     test("Should return false", () => {
         const c = isPalindrome("abc")
+        assert.booleanEquals(false, c);
+    })
+
+    test("Should return false", () => {
+        const c = isPalindrome("😀😀")
         assert.booleanEquals(false, c);
     })
 })
