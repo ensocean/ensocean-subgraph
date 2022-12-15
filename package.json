@@ -14,7 +14,7 @@
     "deploy-goerli": "yarn auth && graph deploy --product hosted-service ensocean/ensocean-subgraph-goerli --network goerli",
     "setup-remote": "yarn codegen && yarn build && yarn deploy",
     "setup-remote-goerli": "yarn codegen-goerli && yarn build-goerli && yarn deploy-goerli",
-    "setup-studio": "yarn codegen && yarn build && yarn yarn auth-studio && graph deploy --studio ensocean",
+    "setup-studio": "yarn codegen && yarn build && yarn auth-studio && graph deploy --studio ensocean",
     "setup-studio-goerli": "yarn codegen-goerli && yarn build-goerli && yarn auth-studio && graph deploy --studio ensocean-goerli --network goerli"
   },
   "dependencies": {
