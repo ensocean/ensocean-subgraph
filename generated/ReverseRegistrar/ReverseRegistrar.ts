@@ -7,7 +7,7 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt
+  BigInt,
 } from "@graphprotocol/graph-ts";
 
 export class ControllerChanged extends ethereum.Event {
@@ -101,7 +101,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
 
   claim(owner: Address): Bytes {
     let result = super.call("claim", "claim(address):(bytes32)", [
-      ethereum.Value.fromAddress(owner)
+      ethereum.Value.fromAddress(owner),
     ]);
 
     return result[0].toBytes();
@@ -109,7 +109,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
 
   try_claim(owner: Address): ethereum.CallResult<Bytes> {
     let result = super.tryCall("claim", "claim(address):(bytes32)", [
-      ethereum.Value.fromAddress(owner)
+      ethereum.Value.fromAddress(owner),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -125,8 +125,8 @@ export class ReverseRegistrar extends ethereum.SmartContract {
       [
         ethereum.Value.fromAddress(addr),
         ethereum.Value.fromAddress(owner),
-        ethereum.Value.fromAddress(resolver)
-      ]
+        ethereum.Value.fromAddress(resolver),
+      ],
     );
 
     return result[0].toBytes();
@@ -135,7 +135,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
   try_claimForAddr(
     addr: Address,
     owner: Address,
-    resolver: Address
+    resolver: Address,
   ): ethereum.CallResult<Bytes> {
     let result = super.tryCall(
       "claimForAddr",
@@ -143,8 +143,8 @@ export class ReverseRegistrar extends ethereum.SmartContract {
       [
         ethereum.Value.fromAddress(addr),
         ethereum.Value.fromAddress(owner),
-        ethereum.Value.fromAddress(resolver)
-      ]
+        ethereum.Value.fromAddress(resolver),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -157,7 +157,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
     let result = super.call(
       "claimWithResolver",
       "claimWithResolver(address,address):(bytes32)",
-      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(resolver)]
+      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(resolver)],
     );
 
     return result[0].toBytes();
@@ -165,12 +165,12 @@ export class ReverseRegistrar extends ethereum.SmartContract {
 
   try_claimWithResolver(
     owner: Address,
-    resolver: Address
+    resolver: Address,
   ): ethereum.CallResult<Bytes> {
     let result = super.tryCall(
       "claimWithResolver",
       "claimWithResolver(address,address):(bytes32)",
-      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(resolver)]
+      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(resolver)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -181,7 +181,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
 
   controllers(param0: Address): boolean {
     let result = super.call("controllers", "controllers(address):(bool)", [
-      ethereum.Value.fromAddress(param0)
+      ethereum.Value.fromAddress(param0),
     ]);
 
     return result[0].toBoolean();
@@ -189,7 +189,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
 
   try_controllers(param0: Address): ethereum.CallResult<boolean> {
     let result = super.tryCall("controllers", "controllers(address):(bool)", [
-      ethereum.Value.fromAddress(param0)
+      ethereum.Value.fromAddress(param0),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -202,7 +202,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
     let result = super.call(
       "defaultResolver",
       "defaultResolver():(address)",
-      []
+      [],
     );
 
     return result[0].toAddress();
@@ -212,7 +212,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
     let result = super.tryCall(
       "defaultResolver",
       "defaultResolver():(address)",
-      []
+      [],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -238,7 +238,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
 
   node(addr: Address): Bytes {
     let result = super.call("node", "node(address):(bytes32)", [
-      ethereum.Value.fromAddress(addr)
+      ethereum.Value.fromAddress(addr),
     ]);
 
     return result[0].toBytes();
@@ -246,7 +246,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
 
   try_node(addr: Address): ethereum.CallResult<Bytes> {
     let result = super.tryCall("node", "node(address):(bytes32)", [
-      ethereum.Value.fromAddress(addr)
+      ethereum.Value.fromAddress(addr),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -272,7 +272,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
 
   setName(name: string): Bytes {
     let result = super.call("setName", "setName(string):(bytes32)", [
-      ethereum.Value.fromString(name)
+      ethereum.Value.fromString(name),
     ]);
 
     return result[0].toBytes();
@@ -280,7 +280,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
 
   try_setName(name: string): ethereum.CallResult<Bytes> {
     let result = super.tryCall("setName", "setName(string):(bytes32)", [
-      ethereum.Value.fromString(name)
+      ethereum.Value.fromString(name),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -293,7 +293,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
     addr: Address,
     owner: Address,
     resolver: Address,
-    name: string
+    name: string,
   ): Bytes {
     let result = super.call(
       "setNameForAddr",
@@ -302,8 +302,8 @@ export class ReverseRegistrar extends ethereum.SmartContract {
         ethereum.Value.fromAddress(addr),
         ethereum.Value.fromAddress(owner),
         ethereum.Value.fromAddress(resolver),
-        ethereum.Value.fromString(name)
-      ]
+        ethereum.Value.fromString(name),
+      ],
     );
 
     return result[0].toBytes();
@@ -313,7 +313,7 @@ export class ReverseRegistrar extends ethereum.SmartContract {
     addr: Address,
     owner: Address,
     resolver: Address,
-    name: string
+    name: string,
   ): ethereum.CallResult<Bytes> {
     let result = super.tryCall(
       "setNameForAddr",
@@ -322,8 +322,8 @@ export class ReverseRegistrar extends ethereum.SmartContract {
         ethereum.Value.fromAddress(addr),
         ethereum.Value.fromAddress(owner),
         ethereum.Value.fromAddress(resolver),
-        ethereum.Value.fromString(name)
-      ]
+        ethereum.Value.fromString(name),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();

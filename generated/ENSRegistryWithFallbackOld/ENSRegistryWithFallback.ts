@@ -7,7 +7,7 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt
+  BigInt,
 } from "@graphprotocol/graph-ts";
 
 export class ApprovalForAll extends ethereum.Event {
@@ -137,7 +137,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
     let result = super.call(
       "isApprovedForAll",
       "isApprovedForAll(address,address):(bool)",
-      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)]
+      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)],
     );
 
     return result[0].toBoolean();
@@ -145,12 +145,12 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
 
   try_isApprovedForAll(
     owner: Address,
-    operator: Address
+    operator: Address,
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "isApprovedForAll",
       "isApprovedForAll(address,address):(bool)",
-      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)]
+      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -176,7 +176,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
 
   owner(node: Bytes): Address {
     let result = super.call("owner", "owner(bytes32):(address)", [
-      ethereum.Value.fromFixedBytes(node)
+      ethereum.Value.fromFixedBytes(node),
     ]);
 
     return result[0].toAddress();
@@ -184,7 +184,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
 
   try_owner(node: Bytes): ethereum.CallResult<Address> {
     let result = super.tryCall("owner", "owner(bytes32):(address)", [
-      ethereum.Value.fromFixedBytes(node)
+      ethereum.Value.fromFixedBytes(node),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -195,7 +195,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
 
   recordExists(node: Bytes): boolean {
     let result = super.call("recordExists", "recordExists(bytes32):(bool)", [
-      ethereum.Value.fromFixedBytes(node)
+      ethereum.Value.fromFixedBytes(node),
     ]);
 
     return result[0].toBoolean();
@@ -203,7 +203,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
 
   try_recordExists(node: Bytes): ethereum.CallResult<boolean> {
     let result = super.tryCall("recordExists", "recordExists(bytes32):(bool)", [
-      ethereum.Value.fromFixedBytes(node)
+      ethereum.Value.fromFixedBytes(node),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -214,7 +214,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
 
   resolver(node: Bytes): Address {
     let result = super.call("resolver", "resolver(bytes32):(address)", [
-      ethereum.Value.fromFixedBytes(node)
+      ethereum.Value.fromFixedBytes(node),
     ]);
 
     return result[0].toAddress();
@@ -222,7 +222,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
 
   try_resolver(node: Bytes): ethereum.CallResult<Address> {
     let result = super.tryCall("resolver", "resolver(bytes32):(address)", [
-      ethereum.Value.fromFixedBytes(node)
+      ethereum.Value.fromFixedBytes(node),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -238,8 +238,8 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
       [
         ethereum.Value.fromFixedBytes(node),
         ethereum.Value.fromFixedBytes(label),
-        ethereum.Value.fromAddress(owner)
-      ]
+        ethereum.Value.fromAddress(owner),
+      ],
     );
 
     return result[0].toBytes();
@@ -248,7 +248,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
   try_setSubnodeOwner(
     node: Bytes,
     label: Bytes,
-    owner: Address
+    owner: Address,
   ): ethereum.CallResult<Bytes> {
     let result = super.tryCall(
       "setSubnodeOwner",
@@ -256,8 +256,8 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
       [
         ethereum.Value.fromFixedBytes(node),
         ethereum.Value.fromFixedBytes(label),
-        ethereum.Value.fromAddress(owner)
-      ]
+        ethereum.Value.fromAddress(owner),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -268,7 +268,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
 
   ttl(node: Bytes): BigInt {
     let result = super.call("ttl", "ttl(bytes32):(uint64)", [
-      ethereum.Value.fromFixedBytes(node)
+      ethereum.Value.fromFixedBytes(node),
     ]);
 
     return result[0].toBigInt();
@@ -276,7 +276,7 @@ export class ENSRegistryWithFallback extends ethereum.SmartContract {
 
   try_ttl(node: Bytes): ethereum.CallResult<BigInt> {
     let result = super.tryCall("ttl", "ttl(bytes32):(uint64)", [
-      ethereum.Value.fromFixedBytes(node)
+      ethereum.Value.fromFixedBytes(node),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();

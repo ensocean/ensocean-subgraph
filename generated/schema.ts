@@ -8,7 +8,7 @@ import {
   store,
   Bytes,
   BigInt,
-  BigDecimal
+  BigDecimal,
 } from "@graphprotocol/graph-ts";
 
 export class Domain extends Entity {
@@ -23,10 +23,16 @@ export class Domain extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.BYTES,
-        `Entities of type Domain must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type Domain must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
       );
       store.set("Domain", id.toBytes().toHexString(), this);
     }
+  }
+
+  static loadInBlock(id: Bytes): Domain | null {
+    return changetype<Domain | null>(
+      store.get_in_block("Domain", id.toHexString()),
+    );
   }
 
   static load(id: Bytes): Domain | null {
@@ -35,7 +41,11 @@ export class Domain extends Entity {
 
   get id(): Bytes {
     let value = this.get("id");
-    return value!.toBytes();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
   }
 
   set id(value: Bytes) {
@@ -59,21 +69,17 @@ export class Domain extends Entity {
     }
   }
 
-  get label(): string | null {
+  get label(): string {
     let value = this.get("label");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toString();
     }
   }
 
-  set label(value: string | null) {
-    if (!value) {
-      this.unset("label");
-    } else {
-      this.set("label", Value.fromString(<string>value));
-    }
+  set label(value: string) {
+    this.set("label", Value.fromString(value));
   }
 
   get owner(): Bytes | null {
@@ -163,7 +169,11 @@ export class Domain extends Entity {
 
   get length(): i32 {
     let value = this.get("length");
-    return value!.toI32();
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
   }
 
   set length(value: i32) {
@@ -172,7 +182,11 @@ export class Domain extends Entity {
 
   get segmentLength(): i32 {
     let value = this.get("segmentLength");
-    return value!.toI32();
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
   }
 
   set segmentLength(value: i32) {
@@ -213,13 +227,12 @@ export class Domain extends Entity {
     }
   }
 
-  get events(): Array<Bytes> {
-    let value = this.get("events");
-    return value!.toBytesArray();
-  }
-
-  set events(value: Array<Bytes>) {
-    this.set("events", Value.fromBytesArray(value));
+  get events(): DomainEventLoader {
+    return new DomainEventLoader(
+      "Domain",
+      this.get("id")!.toBytes().toHexString(),
+      "events",
+    );
   }
 }
 
@@ -235,21 +248,31 @@ export class DomainEvent extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.BYTES,
-        `Entities of type DomainEvent must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type DomainEvent must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
       );
       store.set("DomainEvent", id.toBytes().toHexString(), this);
     }
   }
 
+  static loadInBlock(id: Bytes): DomainEvent | null {
+    return changetype<DomainEvent | null>(
+      store.get_in_block("DomainEvent", id.toHexString()),
+    );
+  }
+
   static load(id: Bytes): DomainEvent | null {
     return changetype<DomainEvent | null>(
-      store.get("DomainEvent", id.toHexString())
+      store.get("DomainEvent", id.toHexString()),
     );
   }
 
   get id(): Bytes {
     let value = this.get("id");
-    return value!.toBytes();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
   }
 
   set id(value: Bytes) {
@@ -258,7 +281,11 @@ export class DomainEvent extends Entity {
 
   get blockNumber(): i32 {
     let value = this.get("blockNumber");
-    return value!.toI32();
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
   }
 
   set blockNumber(value: i32) {
@@ -301,7 +328,11 @@ export class DomainEvent extends Entity {
 
   get domain(): Bytes {
     let value = this.get("domain");
-    return value!.toBytes();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
   }
 
   set domain(value: Bytes) {
@@ -406,10 +437,16 @@ export class Account extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.BYTES,
-        `Entities of type Account must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type Account must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
       );
       store.set("Account", id.toBytes().toHexString(), this);
     }
+  }
+
+  static loadInBlock(id: Bytes): Account | null {
+    return changetype<Account | null>(
+      store.get_in_block("Account", id.toHexString()),
+    );
   }
 
   static load(id: Bytes): Account | null {
@@ -418,7 +455,11 @@ export class Account extends Entity {
 
   get id(): Bytes {
     let value = this.get("id");
-    return value!.toBytes();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
   }
 
   set id(value: Bytes) {
@@ -442,12 +483,47 @@ export class Account extends Entity {
     }
   }
 
-  get domains(): Array<Bytes> {
-    let value = this.get("domains");
-    return value!.toBytesArray();
+  get domains(): DomainLoader {
+    return new DomainLoader(
+      "Account",
+      this.get("id")!.toBytes().toHexString(),
+      "domains",
+    );
+  }
+}
+
+export class DomainEventLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
   }
 
-  set domains(value: Array<Bytes>) {
-    this.set("domains", Value.fromBytesArray(value));
+  load(): DomainEvent[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<DomainEvent[]>(value);
+  }
+}
+
+export class DomainLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): Domain[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<Domain[]>(value);
   }
 }

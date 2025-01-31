@@ -1,7 +1,7 @@
 type Domain @entity {
   id: Bytes! 
   name: String
-  label: String 
+  label: String!
   owner: Account
   expires: BigInt
   registrant: Account

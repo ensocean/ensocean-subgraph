@@ -7,7 +7,7 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt
+  BigInt,
 } from "@graphprotocol/graph-ts";
 
 export class Approval extends ethereum.Event {
@@ -224,7 +224,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
   static bind(address: Address): BaseRegistrarImplementation {
     return new BaseRegistrarImplementation(
       "BaseRegistrarImplementation",
-      address
+      address,
     );
   }
 
@@ -245,7 +245,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   available(id: BigInt): boolean {
     let result = super.call("available", "available(uint256):(bool)", [
-      ethereum.Value.fromUnsignedBigInt(id)
+      ethereum.Value.fromUnsignedBigInt(id),
     ]);
 
     return result[0].toBoolean();
@@ -253,7 +253,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   try_available(id: BigInt): ethereum.CallResult<boolean> {
     let result = super.tryCall("available", "available(uint256):(bool)", [
-      ethereum.Value.fromUnsignedBigInt(id)
+      ethereum.Value.fromUnsignedBigInt(id),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -264,7 +264,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   balanceOf(owner: Address): BigInt {
     let result = super.call("balanceOf", "balanceOf(address):(uint256)", [
-      ethereum.Value.fromAddress(owner)
+      ethereum.Value.fromAddress(owner),
     ]);
 
     return result[0].toBigInt();
@@ -272,7 +272,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   try_balanceOf(owner: Address): ethereum.CallResult<BigInt> {
     let result = super.tryCall("balanceOf", "balanceOf(address):(uint256)", [
-      ethereum.Value.fromAddress(owner)
+      ethereum.Value.fromAddress(owner),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -298,7 +298,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   controllers(param0: Address): boolean {
     let result = super.call("controllers", "controllers(address):(bool)", [
-      ethereum.Value.fromAddress(param0)
+      ethereum.Value.fromAddress(param0),
     ]);
 
     return result[0].toBoolean();
@@ -306,7 +306,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   try_controllers(param0: Address): ethereum.CallResult<boolean> {
     let result = super.tryCall("controllers", "controllers(address):(bool)", [
-      ethereum.Value.fromAddress(param0)
+      ethereum.Value.fromAddress(param0),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -332,7 +332,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   getApproved(tokenId: BigInt): Address {
     let result = super.call("getApproved", "getApproved(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
 
     return result[0].toAddress();
@@ -342,7 +342,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
     let result = super.tryCall(
       "getApproved",
       "getApproved(uint256):(address)",
-      [ethereum.Value.fromUnsignedBigInt(tokenId)]
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -355,7 +355,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
     let result = super.call(
       "isApprovedForAll",
       "isApprovedForAll(address,address):(bool)",
-      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)]
+      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)],
     );
 
     return result[0].toBoolean();
@@ -363,12 +363,12 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   try_isApprovedForAll(
     owner: Address,
-    operator: Address
+    operator: Address,
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "isApprovedForAll",
       "isApprovedForAll(address,address):(bool)",
-      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)]
+      [ethereum.Value.fromAddress(owner), ethereum.Value.fromAddress(operator)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -394,7 +394,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   nameExpires(id: BigInt): BigInt {
     let result = super.call("nameExpires", "nameExpires(uint256):(uint256)", [
-      ethereum.Value.fromUnsignedBigInt(id)
+      ethereum.Value.fromUnsignedBigInt(id),
     ]);
 
     return result[0].toBigInt();
@@ -404,7 +404,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
     let result = super.tryCall(
       "nameExpires",
       "nameExpires(uint256):(uint256)",
-      [ethereum.Value.fromUnsignedBigInt(id)]
+      [ethereum.Value.fromUnsignedBigInt(id)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -430,7 +430,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   ownerOf(tokenId: BigInt): Address {
     let result = super.call("ownerOf", "ownerOf(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
 
     return result[0].toAddress();
@@ -438,7 +438,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
 
   try_ownerOf(tokenId: BigInt): ethereum.CallResult<Address> {
     let result = super.tryCall("ownerOf", "ownerOf(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
+      ethereum.Value.fromUnsignedBigInt(tokenId),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -454,8 +454,8 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
       [
         ethereum.Value.fromUnsignedBigInt(id),
         ethereum.Value.fromAddress(owner),
-        ethereum.Value.fromUnsignedBigInt(duration)
-      ]
+        ethereum.Value.fromUnsignedBigInt(duration),
+      ],
     );
 
     return result[0].toBigInt();
@@ -464,7 +464,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
   try_register(
     id: BigInt,
     owner: Address,
-    duration: BigInt
+    duration: BigInt,
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "register",
@@ -472,8 +472,8 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
       [
         ethereum.Value.fromUnsignedBigInt(id),
         ethereum.Value.fromAddress(owner),
-        ethereum.Value.fromUnsignedBigInt(duration)
-      ]
+        ethereum.Value.fromUnsignedBigInt(duration),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -489,8 +489,8 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
       [
         ethereum.Value.fromUnsignedBigInt(id),
         ethereum.Value.fromAddress(owner),
-        ethereum.Value.fromUnsignedBigInt(duration)
-      ]
+        ethereum.Value.fromUnsignedBigInt(duration),
+      ],
     );
 
     return result[0].toBigInt();
@@ -499,7 +499,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
   try_registerOnly(
     id: BigInt,
     owner: Address,
-    duration: BigInt
+    duration: BigInt,
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "registerOnly",
@@ -507,8 +507,8 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
       [
         ethereum.Value.fromUnsignedBigInt(id),
         ethereum.Value.fromAddress(owner),
-        ethereum.Value.fromUnsignedBigInt(duration)
-      ]
+        ethereum.Value.fromUnsignedBigInt(duration),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -520,7 +520,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
   renew(id: BigInt, duration: BigInt): BigInt {
     let result = super.call("renew", "renew(uint256,uint256):(uint256)", [
       ethereum.Value.fromUnsignedBigInt(id),
-      ethereum.Value.fromUnsignedBigInt(duration)
+      ethereum.Value.fromUnsignedBigInt(duration),
     ]);
 
     return result[0].toBigInt();
@@ -529,7 +529,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
   try_renew(id: BigInt, duration: BigInt): ethereum.CallResult<BigInt> {
     let result = super.tryCall("renew", "renew(uint256,uint256):(uint256)", [
       ethereum.Value.fromUnsignedBigInt(id),
-      ethereum.Value.fromUnsignedBigInt(duration)
+      ethereum.Value.fromUnsignedBigInt(duration),
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -542,7 +542,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
     let result = super.call(
       "supportsInterface",
       "supportsInterface(bytes4):(bool)",
-      [ethereum.Value.fromFixedBytes(interfaceID)]
+      [ethereum.Value.fromFixedBytes(interfaceID)],
     );
 
     return result[0].toBoolean();
@@ -552,7 +552,7 @@ export class BaseRegistrarImplementation extends ethereum.SmartContract {
     let result = super.tryCall(
       "supportsInterface",
       "supportsInterface(bytes4):(bool)",
-      [ethereum.Value.fromFixedBytes(interfaceID)]
+      [ethereum.Value.fromFixedBytes(interfaceID)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
